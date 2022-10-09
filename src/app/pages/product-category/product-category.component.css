@@ -1,0 +1,125 @@
+.product_category {
+  padding: 0 116px;
+}
+.product_header {
+  margin: 35px 0;
+  display: flex;
+  justify-content: space-between;
+}
+.header_branch {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: normal;
+  color: #000;
+  margin: 0;
+  text-transform: capitalize;
+}
+.product_search {
+  width: 240px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8c8c8c;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: normal;
+  border-radius: 5px;
+  height: 50px;
+  background: #fff;
+}
+.search-type {
+  display: flex;
+  align-items: center;
+}
+.search-type span {
+  margin-right: 5px;
+}
+.product_list {
+  display: flex;
+}
+.product_item {
+  margin-bottom: 20px;
+}
+.product_item:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+  transition: all 0.5s;
+}
+.card-img-top {
+  cursor: pointer;
+  max-height: 214px;
+}
+.card-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+::ng-deep.mat-menu-panel {
+  width: 240px !important;
+}
+.mat-menu-item:hover:not([disabled]),
+.mat-menu-item.cdk-program-focused:not([disabled]),
+.mat-menu-item.cdk-keyboard-focused:not([disabled]),
+.mat-menu-item-highlighted:not([disabled]) {
+  background-color: #cd1818;
+  color: #fff;
+}
+.card > .list-group {
+  border-top: none;
+  border-bottom: none;
+}
+.item-price {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: normal;
+  color: #f0f0f0;
+  background-color: #e40000;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+.list-group-item:last-child {
+  min-height: 70px;
+}
+.list-group-item:not(:last-child),
+.list-group-item:not(:first-child) {
+  text-overflow: ellipsis;
+}
+.list-group-item {
+  border: none;
+}
+.list-group-item img {
+  margin-right: 5px;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.page-link {
+  border-radius: 50% !important;
+  margin-right: 16px;
+}
+ngb-pagination ::ng-deep ul > li:not(.active) > a {
+  background-color: #fff !important;
+  color: #8c8c8c;
+  border-color: unset;
+}
+
+ngb-pagination ::ng-deep ul > li.active > a {
+  background-color: #bb2d3b !important;
+  box-shadow: none !important;
+  border-color: unset;
+}
+ngb-pagination ::ng-deep ul > li > a {
+  border-radius: 50%;
+  border-color: none;
+  margin-right: 15px;
+  outline: none;
+  box-shadow: none !important;
+  border-color: unset;
+}

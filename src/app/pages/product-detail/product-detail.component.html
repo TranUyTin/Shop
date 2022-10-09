@@ -1,0 +1,118 @@
+<div class="product_detail" *ngFor="let item of productDetail">
+  <div class="product_detail-header">
+    <h4 class="detail_header-name">
+      {{ item.name }}
+    </h4>
+    <div class="detail_header-stock">Còn hàng</div>
+  </div>
+  <div class="detail_content">
+    <div class="detail_slider">
+      <div class="gallery">
+        <div class="swiper-container gallery-slider">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" *ngFor="let image of images">
+              <img src="{{ image }}" alt="" />
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-container gallery-thumbs">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" *ngFor="let image of images">
+              <img src="{{ image }}" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="detail_content-right">
+      <div class="detail_content-price">
+        <span class="prices-header"> Mua ngay </span>
+        <h5 class="prices">
+          {{ item.cost }}
+        </h5>
+      </div>
+      <div class="detail_content-promo">
+        <h5 class="promo_header">Khuyến mãi</h5>
+        <div class="promo_detail-content">
+          <span class="promo_detail-item">
+            <mat-icon class="icon-promo">card_giftcard</mat-icon>
+            Bảo hành chính hãng 2 năm với tất cả sản phẩm</span
+          >
+          <span class="promo_detail-item">
+            <mat-icon class="icon-promo">card_giftcard</mat-icon>
+            Voucher mua hàng trị giá 2.000.000đ. (Yêu cầu check in tại Shop)
+          </span>
+          <span class="promo_detail-item">
+            <mat-icon class="icon-promo">card_giftcard</mat-icon>Túi chống sốc
+            Reputation Gear</span
+          >
+          <span class="promo_detail-item">
+            <mat-icon class="icon-promo">card_giftcard</mat-icon>Miễn phí vận
+            chuyển toàn quốc với đơn hàng có giá trị trên 1.000.000đ.
+          </span>
+        </div>
+      </div>
+      <div class="detail_content-promo">
+        <h5 class="promo_header">Chính sách bán hàng</h5>
+        <div class="promo_detail-content">
+          <span class="promo_detail-item"
+            ><mat-icon class="icon-promo"> local_shipping</mat-icon> Miễn phí
+            giao hàng cho đơn hàng từ 800K</span
+          >
+          <span class="promo_detail-item">
+            <mat-icon class="icon-promo">verified_user</mat-icon>Cam kết hàng
+            chính hãng 100%</span
+          >
+          <span class="promo_detail-item">
+            <mat-icon class="icon-promo">cached</mat-icon>Đổi trả trong vòng 10
+            ngày</span
+          >
+        </div>
+      </div>
+      <div class="detail_content-promo">
+        <h5 class="promo_header">Dịch vụ khác</h5>
+        <div class="promo_detail-content">
+          <span class="promo_detail-item">
+            <mat-icon class="icon-promo">build</mat-icon>
+            Sửa chữa đồng giá 150.000đ.</span
+          >
+          <span class="promo_detail-item">
+            <mat-icon class="icon-promo">computer</mat-icon>Vệ sinh máy tính,
+            laptop.</span
+          >
+          <span class="promo_detail-item">
+            <mat-icon class="icon-promo">verified_user</mat-icon>Bảo hành chính
+            hãng.</span
+          >
+        </div>
+      </div>
+      <div class="detail_content-button">
+        <button class="buy-now btn btn-danger">MUA NGAY</button>
+        <button class="add-cart btn btn-outline-danger">
+          THÊM VÀO GIỎ HÀNG
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="product_detail-info">
+    <div class="product_detail-container">
+      <div class="product_detail-table">
+        <h4 class="header_detail-table">THÔNG SỐ KỸ THUẬT</h4>
+        <ng-container *ngFor="let item of this.detailInfo">
+          <div class="table_item-detail">
+            <span class="item_value">{{ item }}</span>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="product_detail-decs">
+      <h4 class="header_detail-decs">ĐẶC ĐIỂM SẢN PHẨM</h4>
+      <div class="detail_content">
+        <span>
+          {{ productDetail[0].details }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<swiper
+  [slidesPerView]="1"
+  [navigation]="true"
+  [centeredSlides]="true"
+  [loop]="true"
+  [autoplay]="{ delay: 3000 }"
+  class="my-swiper"
+>
+  <ng-template swiperSlide *ngFor="let image of images; index as i">
+    <img class="swiper-slide-container" src="{{ image }}" alt="slider" />
+  </ng-template>
+</swiper>

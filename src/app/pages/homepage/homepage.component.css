@@ -1,0 +1,55 @@
+.gif_image {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background-color: #000;
+  height: 300px;
+}
+.introduce {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 5px;
+  width: 1200px;
+  height: 450px;
+  margin: auto;
+}
+.product_left {
+  width: 770px;
+  height: 429px;
+}
+.product_left img,
+.product_right-item img,
+.branch_item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px;
+}
+.product_right-item {
+  width: 415px;
+  height: 143px;
+}
+.branch {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 660px;
+  background-color: #1e1e1e;
+}
+.branch_item {
+  width: 650px;
+  height: 320px;
+  padding: 10px;
+}
+.slider {
+  width: 100%;
+}
+.branch_item img:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+  transition: all 0.5s;
+}

@@ -1,0 +1,147 @@
+<div class="container">
+  <span class="icon-close" (click)="closeDialog()">
+    <mat-icon>close</mat-icon>
+  </span>
+  <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" autocomplete="off">
+    <h1 class="form_heading">Đăng ký</h1>
+    <div class="form_control">
+      <input
+        class="form_input"
+        id="fullName"
+        type="text"
+        formControlName="fullName"
+        placeholder="Nhập họ và tên của bạn"
+      />
+      <span class="animation"></span>
+      <div *ngIf="validateOverall('fullName')">
+        <span class="mess" *ngIf="validateControls('fullName', 'required')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Vui lòng nhập họ và
+          tên</span
+        >
+        <span class="mess" *ngIf="validateControls('fullName', 'maxlength')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Độ dài tối đa của họ
+          và tên là 30 kí tự</span
+        >
+      </div>
+    </div>
+    <div class="form_control">
+      <input
+        class="form_input"
+        id="userEmail"
+        type="text"
+        formControlName="userEmail"
+        placeholder="Nhập địa chỉ email của bạn"
+      />
+      <span class="animation"></span>
+      <div *ngIf="validateOverall('userEmail')">
+        <span class="mess" *ngIf="validateControls('userEmail', 'required')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Vui lòng nhập
+          email</span
+        >
+        <span class="mess" *ngIf="validateControls('userEmail', 'email')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Trường này phải là
+          email</span
+        >
+      </div>
+    </div>
+    <div class="form_control">
+      <input
+        class="form_input"
+        id="phoneNumber"
+        type="text"
+        formControlName="phoneNumber"
+        placeholder="Nhập số điện thoại của bạn"
+      />
+      <span class="animation"></span>
+      <div *ngIf="validateOverall('phoneNumber')">
+        <span class="mess" *ngIf="validateControls('phoneNumber', 'required')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Vui lòng nhập số điện
+          thoại</span
+        >
+        <span class="mess" *ngIf="validateControls('phoneNumber', 'pattern')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Số điện thoại phải bắt
+          đầu bằng số "0" và có 10 hoặc 11 số</span
+        >
+      </div>
+    </div>
+    <div class="form_control">
+      <input
+        class="form_input"
+        id="address"
+        type="text"
+        formControlName="address"
+        placeholder="Nhập địa chỉ của bạn"
+      />
+      <span class="animation"></span>
+      <div *ngIf="validateOverall('address')">
+        <span class="mess" *ngIf="validateControls('address', 'required')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Vui lòng nhập địa chỉ
+          của bạn</span
+        >
+        <span class="mess" *ngIf="validateControls('address', 'maxlength')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Địa chỉ có độ dài tối
+          đa là 90 kí tự</span
+        >
+      </div>
+    </div>
+    <div class="form_control">
+      <input
+        class="form_input"
+        id="userName"
+        type="text"
+        formControlName="userName"
+        placeholder="Nhập tài khoản của bạn"
+      />
+      <span class="animation"></span>
+      <div *ngIf="validateOverall('userName')">
+        <span class="mess" *ngIf="validateControls('userName', 'required')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Vui lòng nhập tài
+          khoản của bạn</span
+        >
+        <span class="mess" *ngIf="validateControls('userName', 'minlength')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Độ dài ít nhất của tài
+          khoản là 5 kí tự</span
+        >
+        <span class="mess" *ngIf="validateControls('userName', 'maxlength')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Độ dài tối đa của tài
+          khoản là 20 kí tự</span
+        >
+      </div>
+    </div>
+    <div class="form_control">
+      <input
+        class="form_input"
+        id="passWord"
+        type="password"
+        formControlName="passWord"
+        placeholder="Nhập mật khẩu của bạn"
+      />
+      <span class="animation"></span>
+      <div *ngIf="validateOverall('passWord')">
+        <span class="mess" *ngIf="validateControls('passWord', 'required')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Vui lòng nhập mật khẩu
+          của bạn</span
+        >
+        <span class="mess" *ngIf="validateControls('passWord', 'pattern')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Mật khẩu có ít nhất 8
+          kí tự, 1 kí tự in hoa, kí tự thường và số</span
+        >
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      class="form_btn"
+      [ngClass]="this.signUpForm.valid ? 'active_form_btn' : ''"
+      [disabled]="!this.signUpForm.valid"
+    >
+      Đăng ký
+    </button>
+  </form>
+  <div class="switch_sign">
+    <p>
+      Bạn đã có tài khoản?
+      <span class="switchButton" (click)="switchLogin()">Đăng nhập!</span>
+    </p>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<div [ngStyle]="{ 'padding-bottom.px': offsetHeight }">
+  <header>
+    <div class="header_container">
+      <div class="header_top">
+        <a href="#" class="header_top-logo" routerLink="">
+          <img src="../../assets/image/logo/logo.png" alt="" />
+        </a>
+        <div class="header_top_search">
+          <input type="text" placeholder="Bạn cần tìm sản phẩm nào?" />
+          <mat-icon class="icon-search">search</mat-icon>
+        </div>
+        <div class="header_top-action">
+          <div *ngIf="!isLogin" class="logIn" (click)="openDialog()">
+            Đăng nhập
+          </div>
+          <div
+            *ngIf="isLogin"
+            class="personal-user"
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+          >
+            <div class="name-user">Tin</div>
+            <mat-icon class="icon-header">person</mat-icon>
+            <mat-menu #menu="matMenu" class="matMenu">
+              <button mat-menu-item>
+                <mat-icon>face</mat-icon>
+                <span>Thông tin cá nhân</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon>input</mat-icon>
+                <span>Đăng xuất</span>
+              </button>
+            </mat-menu>
+          </div>
+          <div
+            class="cart-user"
+            (click)="this.navigateService.navigatePath('cart')"
+          >
+            <mat-icon class="icon-header">shopping_cart </mat-icon>
+            <span class="number-cart-user">9</span>
+          </div>
+        </div>
+      </div>
+      <div class="header_nav">
+        <ul class="product_list" *ngFor="let productItem of listProductType">
+          <li>
+            {{ productItem }}
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </li>
+          <ul class="product_item">
+            <li class="submenu" *ngFor="let item of listProductItem">
+              <a href=""> {{ item }} </a>
+            </li>
+          </ul>
+        </ul>
+      </div>
+    </div>
+  </header>
+</div>

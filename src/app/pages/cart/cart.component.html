@@ -1,0 +1,87 @@
+<div class="cart_content" *ngIf="productCart.length > 0">
+  <div class="cart">
+    <h4 class="cart_header">Giỏ hàng (13)</h4>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Sản phẩm</th>
+          <th scope="col"></th>
+          <th scope="col">Đơn giá</th>
+          <th scope="col">Số lượng</th>
+          <th scope="col">Thành tiền</th>
+          <th scope="col">Xóa</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let cartItem of productCart">
+        <tr>
+          <td>
+            <img src="{{ cartItem.images[0] }}" alt="image" class="cart_img" />
+          </td>
+          <td class="cart_name">{{ cartItem.name }}</td>
+          <td class="cart_cost">{{ cartItem.cost }}</td>
+          <td class="cart_number">
+            <div class="quantity_container">
+              <button
+                class="quantity_btn"
+                (click)="decrement()"
+                [disabled]="checkDisableBtnDecrease()"
+              >
+                -
+              </button>
+              <input
+                id="quantityElement"
+                type="number"
+                disabled
+                value="quantity"
+                [(ngModel)]="quantity"
+                min="0"
+                max="100"
+              />
+              <button
+                class="quantity_btn"
+                (click)="increment()"
+                [disabled]="checkDisableBtnIncrease()"
+              >
+                +
+              </button>
+            </div>
+          </td>
+          <td class="cart_total">{{ cartItem.cost }}</td>
+          <td class="cart_action">
+            <mat-icon>delete</mat-icon>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="cart_footer">
+    <div class="total_fee">Thành tiền: 211.999.000 VNĐ</div>
+    <div class="footer_btn_container">
+      <button
+        class="btn-backShop btn btn-outline-danger"
+        (click)="this.navigateService.navigatePath('')"
+      >
+        Tiếp tục mua sắm
+      </button>
+      <button class="btn-checkout btn btn-danger">Thanh toán</button>
+    </div>
+  </div>
+</div>
+<div class="cart_empty" *ngIf="productCart.length <= 0">
+  <div class="cart_empty_img">
+    <img
+      src="https://i.imgur.com/Drj57qu.png
+    "
+      alt=""
+    />
+  </div>
+  <div class="cart_empty_content">Giỏ hàng chưa có sản phẩm nào</div>
+  <div class="cart_empty_btn">
+    <button
+      class="btn-backShop btn btn-danger"
+      (click)="this.navigateService.navigatePath('')"
+    >
+      Tiếp tục mua sắm
+    </button>
+  </div>
+</div>

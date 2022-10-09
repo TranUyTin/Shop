@@ -1,0 +1,23 @@
+@import "~swiper/swiper.min.css";
+@import "~swiper/modules/navigation/navigation.min.css";
+@import "~swiper/modules/pagination/pagination.min.css";
+.picsum-img-wrapper img {
+  width: 100% !important;
+  height: 400px;
+  object-position: center;
+  margin-left: -1px;
+  transition: all 0.7s ease;
+}
+
+.my-swiper {
+  height: 100%;
+}
+
+.swiper-slide-container {
+  height: 350px;
+  width: 100%;
+}
+.swiper-button-next,
+.swiper-button-prev {
+  color: #fff;
+}

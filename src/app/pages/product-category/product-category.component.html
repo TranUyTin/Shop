@@ -1,0 +1,100 @@
+<div class="product_category">
+  <div class="product_header">
+    <div class="header_branch">Laptop Asus</div>
+    <div class="product_search" mat-icon-button [matMenuTriggerFor]="menu">
+      <div class="search-type">
+        <span> Sắp xếp: {{ searchTypeName }} </span>
+        <mat-icon class="menu-search-icon">keyboard_arrow_down</mat-icon>
+        <mat-menu #menu="matMenu" class="matMenu" id="matMenu">
+          <button
+            mat-menu-item
+            *ngFor="let search of searchType"
+            (click)="selectSearch(search.value)"
+          >
+            <span>Sắp xếp : {{ search.value }}</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </div>
+  <div class="product_list row">
+    <div class="product_item col-md-3" *ngFor="let product of products">
+      <div
+        class="card"
+        style="width: 18rem"
+        (click)="this.navigateService.navigatePath('/product_detail')"
+      >
+        <img src="{{ product.images[0] }}" class="card-img-top" alt="..." />
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ product.name }}
+          </h5>
+          <p class="card-text">
+            <span class="item-price">{{ product.cost }}</span>
+          </p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <img
+              width="22px"
+              height="22px"
+              src="../../../assets/image/product_item/cpu.png"
+            />
+            <span>
+              {{
+                product.specifications
+                  .split(",")[0]
+                  .concat(product.specifications.split(",")[1])
+                  .split("(")[0]
+                  .split("CPU")[1]
+              }}
+            </span>
+          </li>
+          <li class="list-group-item">
+            <img
+              width="22px"
+              height="22px"
+              src="../../../assets/image/product_item/ram.png"
+            />
+            <span>
+              {{
+                product.specifications
+                  .split(",")[2]
+                  .split(" ", 5)
+                  .join(",")
+                  .replaceAll(",", " ")
+              }}</span
+            >
+          </li>
+          <li class="list-group-item">
+            <img
+              width="22px"
+              height="22px"
+              src="../../../assets/image/product_item/gpu.png"
+            />
+            <span> {{ product.specifications.split(",")[4] }}</span>
+          </li>
+        </ul>
+        <div class="card-body">
+          <a href="#" class="card-link">
+            <button type="button" class="btn btn-outline-danger">
+              Xem chi tiết
+            </button></a
+          >
+          <a href="#" class="card-link">
+            <button type="button" class="btn btn-danger">Thêm vào giỏ</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pagination">
+    <ngb-pagination
+      [collectionSize]="100"
+      [(page)]="page"
+      [boundaryLinks]="true"
+      [maxSize]="4"
+      [rotate]="true"
+    ></ngb-pagination>
+  </div>
+</div>
