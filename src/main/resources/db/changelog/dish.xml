@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet author="ttkkhoa" id="202210268">
+        <createTable tableName="dish">
+            <column name="id" type="BIGINT"  autoIncrement="true">
+            <constraints primaryKey="true" nullable="false"></constraints>
+            </column>
+            <column name="name" type="VARCHAR(255)" />
+            <column name="description" type="VARCHAR(255)" />
+            <column name="price" type="INTEGER(255)" />
+            <column name="amount" type="INTEGER(255)" />
+            <column name="dish_type_id" type="BIGINT" />
+            <column name="is_deleted" type="BOOLEAN" />
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
