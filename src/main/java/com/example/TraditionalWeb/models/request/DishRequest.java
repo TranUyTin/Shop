@@ -27,7 +27,7 @@ public class DishRequest {
 
     private Boolean isDeleted;
     @NotNull
-    private DishType dishType;
+    private String dishType;
     @NotNull
     private MultipartFile[] images;
 }

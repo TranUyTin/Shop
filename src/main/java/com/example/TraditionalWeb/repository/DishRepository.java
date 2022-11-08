@@ -25,5 +25,7 @@ public interface DishRepository extends JpaRepository<Dish, Long>, JpaSpecificat
 
     Dish findByName(String name);
 
-    Boolean existsByName(String username);
+    Boolean existsByName(String name);
+
+    Boolean existsByNameAndIsDeleted(String name, boolean isDeleted);
 }

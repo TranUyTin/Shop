@@ -17,10 +17,14 @@ public interface DishTypeRepository extends JpaRepository<DishType, Long>, JpaSp
 
     DishType findByIdAndIsDeleted(Long id, boolean isDeleted);
 
+    DishType findByNameAndIsDeleted(String name, boolean isDeleted);
+
     List<DishType> findAll();
 
     @Override
     Page<DishType> findAll(Specification<DishType> spec, Pageable pageable);
 
     Boolean existsByName(String name);
+
+    Boolean existsByNameAndIsDeleted(String name, boolean isDeleted);
 }

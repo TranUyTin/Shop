@@ -28,8 +28,17 @@ dependencies {
 	implementation 'org.liquibase:liquibase-core'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	// https://mvnrepository.com/artifact/commons-io/commons-io
+	implementation 'commons-io:commons-io:2.6'
+// https://mvnrepository.com/artifact/net.coobird/thumbnailator
+	implementation 'net.coobird:thumbnailator:0.4.18'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-loader-tools
+	implementation 'org.springframework.boot:spring-boot-loader-tools:2.7.5'
+
+
 }
 
 tasks.named('test') {

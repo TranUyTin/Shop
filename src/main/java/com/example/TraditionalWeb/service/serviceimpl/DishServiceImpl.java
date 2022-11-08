@@ -1,10 +1,7 @@
 package com.example.TraditionalWeb.service.serviceimpl;
 
 import com.example.TraditionalWeb.exception.UserException;
-import com.example.TraditionalWeb.models.Dish;
-import com.example.TraditionalWeb.models.Images;
-import com.example.TraditionalWeb.models.OrderDetails;
-import com.example.TraditionalWeb.models.User;
+import com.example.TraditionalWeb.models.*;
 import com.example.TraditionalWeb.models.request.DishRequest;
 import com.example.TraditionalWeb.models.request.PagingRequest;
 import com.example.TraditionalWeb.models.response.PaginationResponse;
@@ -14,19 +11,24 @@ import com.example.TraditionalWeb.repository.DishTypeRepository;
 import com.example.TraditionalWeb.repository.ImagesRepository;
 import com.example.TraditionalWeb.repository.UserRepository;
 import com.example.TraditionalWeb.service.DishService;
+import com.example.TraditionalWeb.util.FileUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
+import org.springframework.boot.loader.tools.FileUtils;
 import javax.persistence.criteria.Predicate;
+import java.io.IOException;
 import java.util.*;
 
 @Service
+@Slf4j
 public class DishServiceImpl implements DishService {
 
     @Autowired
@@ -38,15 +40,44 @@ public class DishServiceImpl implements DishService {
     @Autowired
     ImagesRepository imagesRepository;
 
+    @Value("${file.upload.dir}")
+    private String fileUploadDir;
+
+    @Value("${file.delete.dir}")
+    private String fileDeleteDir;
+
+    @Value("${images.thumbnail.size}")
+    private String thumbnail;
+
+    @Value("${news.file.server.url}")
+    private String newsFileServerUrl;
+
     @Override
-    public Dish createDish(DishRequest dishRequest) {
+    public Dish createDish(DishRequest dishRequest) throws IOException {
         Dish dish = new Dish();
-        if(dishRepository.existsByName(dishRequest.getName())){
+        if(dishRepository.existsByNameAndIsDeleted(dishRequest.getName(), false)){
             throw new UserException("400", "Tên đã tồn tại!");
         }
         dish.setName(dishRequest.getName());
-        dish.setDishType(dishRequest.getDishType());
-        dish.setImages(dishRequest.getImages());
+        if(!dishTypeRepository.existsByNameAndIsDeleted(dishRequest.getDishType(),false)) {
+            throw new UserException("400", "Loại món ăn không tồn tại!");
+        }
+        else {
+            dish.setDishType(dishTypeRepository.findByNameAndIsDeleted(dishRequest.getDishType(), false));
+        }
+        FileUtil fileUtil = FileUtil.getInstance();
+        Map<String, String> fileMap = fileUtil.upLoadFile(dishRequest.getImages(), fileUploadDir, thumbnail);
+        Set<Images> imagesSet = new HashSet<>();
+        if (Objects.nonNull(imagesSet)){
+            fileMap.forEach((fileName, fileUrl) -> {
+                Images images = new Images();
+                images.setImageUrl(fileUrl);
+                images.setIsDeleted(false);
+                images.setDishId(dish);
+                imagesSet.add(images);
+            });
+        }
+        dish.setImages(imagesSet);
         dish.setAmount(dishRequest.getAmount());
         dish.setDescription(dishRequest.getDescription());
         dish.setIsDeleted(false);
@@ -56,14 +87,37 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public Dish updateDish(DishRequest dishRequest) {
+    public Dish updateDish(Long id, DishRequest dishRequest) throws IOException {
         Dish dish = new Dish();
+        if (!dishRepository.existsById(id)){
+            throw new UserException("400", "Món ăn không tồn tại!");
+        }
+        else {
+            dish = dishRepository.findByIdAndIsDeleted(id, false);
+        }
+
         if(dishRepository.existsByName(dishRequest.getName())){
             throw new UserException("400", "Tên đã tồn tại!");
         }
         dish.setName(dishRequest.getName());
-        dish.setDishType(dishRequest.getDishType());
-        dish.setImages(dishRequest.getImages());
+        if(!dishTypeRepository.existsByNameAndIsDeleted(dishRequest.getDishType(),false)) {
+            throw new UserException("400", "Loại món ăn không tồn tại!");
+        }
+        else {
+            dish.setDishType(dishTypeRepository.findByNameAndIsDeleted(dishRequest.getDishType(), false));
+        }
+        FileUtil fileUtil = FileUtil.getInstance();
+        Map<String, String> fileMap = fileUtil.upLoadFile(dishRequest.getImages(), fileUploadDir, thumbnail);
+        Set<Images> imagesSet = new HashSet<>();
+        if (Objects.nonNull(imagesSet)){
+            fileMap.forEach((fileName, fileUrl) -> {
+                Images images = new Images();
+                images.setImageUrl(fileUrl);
+                images.setIsDeleted(false);
+                imagesSet.add(images);
+            });
+        }
+        dish.setImages(imagesSet);
         dish.setAmount(dishRequest.getAmount());
         dish.setDescription(dishRequest.getDescription());
         dish.setPrice(dishRequest.getPrice());
@@ -99,14 +153,10 @@ public class DishServiceImpl implements DishService {
         if(Objects.nonNull(dish.getImages())) {
             dishImage = imageMapper(dish.getImages());
         }
-        Set<OrderDetails> orderDetails = null;
-        if(Objects.nonNull(dish.getOrderDetails())){
-            orderDetails = orderDetailsMapper(dish.getOrderDetails());
-        }
         Dish newDish = new Dish();
         BeanUtils.copyProperties(dish, newDish);
         newDish.setImages(dishImage);
-        newDish.setOrderDetails(orderDetails);
+
         return newDish;
     }
 

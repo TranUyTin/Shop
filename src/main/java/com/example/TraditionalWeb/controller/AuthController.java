@@ -9,10 +9,12 @@ import com.example.TraditionalWeb.service.AuthenticationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 
 @Controller
 @RequestMapping(value = "/auth")
@@ -27,6 +29,9 @@ public class AuthController {
             JwtResponse jwtResponse = authenticationService.doLogin(loginRequest.getUsername(), loginRequest.getPassword());
             return ResponseEntity.ok(jwtResponse);
         }
+        catch(AuthenticationException e){
+            return ResponseEntity.ok("Sai tên đăng nhập hoặc mật khẩu. Vui lòng nhập lại!");
+        }
         catch (Exception e){
             return null;
         }
@@ -38,7 +43,7 @@ public class AuthController {
             User user = authenticationService.signup(signUpRequest);
             return ResponseEntity.ok(user);
         }
-        catch (Exception e){
+        catch (UserException e){
             throw new UserException("400", e.getMessage());
         }
     }

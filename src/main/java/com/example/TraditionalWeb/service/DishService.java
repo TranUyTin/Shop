@@ -5,10 +5,12 @@ import com.example.TraditionalWeb.models.request.DishRequest;
 import com.example.TraditionalWeb.models.request.PagingRequest;
 import com.example.TraditionalWeb.models.response.PaginationResponse;
 
-public interface DishService {
-    Dish createDish(DishRequest dishRequest);
+import java.io.IOException;
 
-    Dish updateDish(DishRequest dishRequest);
+public interface DishService {
+    Dish createDish(DishRequest dishRequest) throws IOException;
+
+    Dish updateDish(Long id, DishRequest dishRequest) throws IOException;
 
     PaginationResponse<Dish> getListDish(PagingRequest pagingRequest);
 
