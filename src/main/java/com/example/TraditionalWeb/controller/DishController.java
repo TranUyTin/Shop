@@ -35,7 +35,7 @@ public class DishController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createDish(DishRequest dishRequest) throws IOException {
+    public ResponseEntity<?> createDish(@ModelAttribute DishRequest dishRequest) throws IOException {
         Dish dish = dishService.createDish(dishRequest);
         return ResponseEntity.ok("Tạo món ăn thành công");
     }

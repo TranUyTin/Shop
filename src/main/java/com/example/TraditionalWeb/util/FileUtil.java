@@ -6,10 +6,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+
+import com.example.TraditionalWeb.exception.FileTypeNotValidException;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -54,6 +57,34 @@ public class FileUtil {
                         Files.createDirectories(fileLocation);
                     }
                     String fileType = FilenameUtils.getExtension(file.getOriginalFilename());
+                    Optional<String> validFileType = Optional.ofNullable(Arrays.stream(validFileTypeStr)
+                            .filter((type) -> type.equalsIgnoreCase(fileType))
+                            .findFirst()
+                            .orElseThrow(() -> new FileTypeNotValidException(HttpStatus.BAD_REQUEST.value(),
+                                    "Request is not valid")));
+                    if(validFileType.isPresent()){
+                        byte[] bytes    = file.getBytes();
+                        String fileName = GenerateDateTime.strGenerateDateTime + file.getOriginalFilename();
+                        String fileUrl  = fileLocation + "/" + fileName;
+                        log.info("Upload file with url: {}", fileUrl);
+                        Files.write(Paths.get(fileUrl), bytes);
+                        log.info("Upload file success");
+                        fileMap.put(fileName, fileUrl);
+
+                        //process thumbnail images
+                        if(StringUtils.hasText(thumbnail)){
+                            if(fileType.equalsIgnoreCase("jpg") || fileType.equalsIgnoreCase("jpeg") || fileType.equalsIgnoreCase("png")){
+                                String[] thumbnailArr = thumbnail.split(",");
+                                for(String thumbnailStr : thumbnailArr){
+                                    String[] thumbNailSizeArr = thumbnailStr.split(":");
+                                    Thumbnails.of(new File(fileUrl))
+                                            .size(Integer.parseInt(thumbNailSizeArr[0]), Integer.parseInt(thumbNailSizeArr[1]))
+                                            .toFile(new File(fileUploadDir + "/" + thumbNailSizeArr[0] + "x" + thumbNailSizeArr[1] + "_"
+                                                    + fileName));
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
