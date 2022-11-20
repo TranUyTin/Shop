@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
                 .totalPage(pageUser.getTotalPages())
                 .build();
         PaginationResponse<User> response = new PaginationResponse<>();
-        response.setSummaryPaginationResponse(summaryPaginationResponse);
+        response.setSummary(summaryPaginationResponse);
         response.setData(users);
         return response;
     }

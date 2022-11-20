@@ -1,5 +1,6 @@
 package com.example.TraditionalWeb.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,13 +33,15 @@ public class Bill {
     private int total;
 
     @Column(name = "is_deleted")
-    private String isDeleted;
+    private Boolean isDeleted;
 
     @OneToMany(mappedBy = "bill", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JsonIgnore
     private Set<OrderDetails> orderDetails;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     public Set<OrderDetails> getOrderDetails() { return orderDetails;}
@@ -47,7 +50,7 @@ public class Bill {
         return id;
     }
 
-    public String getIsDeleted() {
+    public Boolean getIsDeleted() {
         return isDeleted;
     }
 

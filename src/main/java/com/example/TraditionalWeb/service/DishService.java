@@ -1,5 +1,6 @@
 package com.example.TraditionalWeb.service;
 
+import com.example.TraditionalWeb.dto.DishDTO;
 import com.example.TraditionalWeb.models.Dish;
 import com.example.TraditionalWeb.models.request.DishRequest;
 import com.example.TraditionalWeb.models.request.PagingRequest;
@@ -12,9 +13,9 @@ public interface DishService {
 
     Dish updateDish(Long id, DishRequest dishRequest) throws IOException;
 
-    PaginationResponse<Dish> getListDish(PagingRequest pagingRequest);
+    PaginationResponse<DishDTO> getListDish(PagingRequest pagingRequest);
 
-    Dish getDishDetail(Long id);
+    DishDTO getDishDetail(Long id);
 
     Dish deleteDish(Long id);
 }

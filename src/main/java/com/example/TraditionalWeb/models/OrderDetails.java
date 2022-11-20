@@ -1,5 +1,6 @@
 package com.example.TraditionalWeb.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -24,6 +25,7 @@ public class OrderDetails {
 
     @ManyToOne
     @JoinColumn(name = "bill_id")
+    @JsonIgnore
     private Bill bill;
 
     public Long getId() {

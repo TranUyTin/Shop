@@ -14,9 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PaginationResponse<T> {
 
-    @JsonProperty(value = "summary")
-    private SummaryPaginationResponse summaryPaginationResponse;
+    private SummaryPaginationResponse summary;
 
-    @JsonProperty(value = "data")
     private List<T> data;
 }

@@ -1,5 +1,6 @@
 package com.example.TraditionalWeb.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +29,7 @@ public class DishType {
     private boolean isDeleted;
 
     @OneToMany(mappedBy = "dishType", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JsonIgnore
     private Set<Dish> dish;
 
     public String getName() {

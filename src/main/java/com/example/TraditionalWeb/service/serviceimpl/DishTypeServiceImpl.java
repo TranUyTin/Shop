@@ -83,7 +83,7 @@ public class DishTypeServiceImpl implements DishTypeService {
                 .totalPage(dishTypePage.getTotalPages())
                 .build();
         PaginationResponse<DishType> response = new PaginationResponse<>();
-        response.setSummaryPaginationResponse(summaryPaginationResponse);
+        response.setSummary(summaryPaginationResponse);
         response.setData(dishTypeList);
         return response;
     }

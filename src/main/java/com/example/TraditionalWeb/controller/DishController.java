@@ -1,5 +1,6 @@
 package com.example.TraditionalWeb.controller;
 
+import com.example.TraditionalWeb.dto.DishDTO;
 import com.example.TraditionalWeb.exception.UserException;
 import com.example.TraditionalWeb.models.Dish;
 import com.example.TraditionalWeb.models.request.DishRequest;
@@ -24,20 +25,30 @@ public class DishController {
 
     @GetMapping(value = "/list")
     public ResponseEntity<?> getListDish(PagingRequest pagingRequest){
-        PaginationResponse<Dish> dishList = dishService.getListDish(pagingRequest);
+        PaginationResponse<DishDTO> dishList = dishService.getListDish(pagingRequest);
         return ResponseEntity.ok(dishList);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getDishDetail(@PathVariable Long id){
-        Dish dish = dishService.getDishDetail(id);
-        return ResponseEntity.ok(dish);
+        try {
+            DishDTO dish = dishService.getDishDetail(id);
+            return ResponseEntity.ok(dish);
+        } catch (RuntimeException e) {
+            return ResponseEntity.ok(e.getMessage());
+        }
+
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping()
     public ResponseEntity<?> createDish(@ModelAttribute DishRequest dishRequest) throws IOException {
-        Dish dish = dishService.createDish(dishRequest);
-        return ResponseEntity.ok("Tạo món ăn thành công");
+        try{
+            Dish dish = dishService.createDish(dishRequest);
+            return ResponseEntity.ok("Tạo món ăn thành công");
+        }
+        catch (UserException e) {
+            return ResponseEntity.ok(e.getMessage());
+        }
     }
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateDish(@PathVariable Long id, DishRequest dishRequest) throws IOException {

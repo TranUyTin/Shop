@@ -29,5 +29,5 @@ public class DishRequest {
     @NotNull
     private String dishType;
     @NotNull
-    private MultipartFile[] images;
+    private String images;
 }

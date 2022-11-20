@@ -1,5 +1,6 @@
 package com.example.TraditionalWeb.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,12 +36,15 @@ public class Dish {
 
     @ManyToOne()
     @JoinColumn(name = "dish_type_id")
+    @JsonIgnore
     private DishType dishType;
 
     @OneToMany(mappedBy = "dishId", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JsonIgnore
     private Set<Images> images;
 
     @OneToMany(mappedBy = "dish", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JsonIgnore
     private Set<OrderDetails> orderDetails;
 
     public int getAmount() {

@@ -1,5 +1,6 @@
 package com.example.TraditionalWeb.service.serviceimpl;
 
+import com.example.TraditionalWeb.dto.DishDTO;
 import com.example.TraditionalWeb.exception.UserException;
 import com.example.TraditionalWeb.models.*;
 import com.example.TraditionalWeb.models.request.DishRequest;
@@ -26,6 +27,7 @@ import org.springframework.boot.loader.tools.FileUtils;
 import javax.persistence.criteria.Predicate;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -40,17 +42,9 @@ public class DishServiceImpl implements DishService {
     @Autowired
     ImagesRepository imagesRepository;
 
-    @Value("${file.upload.dir}")
-    private String fileUploadDir;
-
-    @Value("${file.delete.dir}")
-    private String fileDeleteDir;
-
     @Value("${images.thumbnail.size}")
     private String thumbnail;
 
-    @Value("${news.file.server.url}")
-    private String newsFileServerUrl;
 
     @Override
     public Dish createDish(DishRequest dishRequest) throws IOException {
@@ -65,17 +59,13 @@ public class DishServiceImpl implements DishService {
         else {
             dish.setDishType(dishTypeRepository.findByNameAndIsDeleted(dishRequest.getDishType(), false));
         }
-        FileUtil fileUtil = FileUtil.getInstance();
-        Map<String, String> fileMap = fileUtil.upLoadFile(dishRequest.getImages(), fileUploadDir, thumbnail);
         Set<Images> imagesSet = new HashSet<>();
-        if (Objects.nonNull(imagesSet)){
-            fileMap.forEach((fileName, fileUrl) -> {
-                Images images = new Images();
-                images.setImageUrl(fileUrl);
-                images.setIsDeleted(false);
-                images.setDishId(dish);
-                imagesSet.add(images);
-            });
+        if (Objects.nonNull(imagesSet)) {
+            Images images = new Images();
+            images.setImageUrl(dishRequest.getImages());
+            images.setIsDeleted(false);
+            images.setDishId(dish);
+            imagesSet.add(images);
         }
         dish.setImages(imagesSet);
         dish.setAmount(dishRequest.getAmount());
@@ -106,16 +96,13 @@ public class DishServiceImpl implements DishService {
         else {
             dish.setDishType(dishTypeRepository.findByNameAndIsDeleted(dishRequest.getDishType(), false));
         }
-        FileUtil fileUtil = FileUtil.getInstance();
-        Map<String, String> fileMap = fileUtil.upLoadFile(dishRequest.getImages(), fileUploadDir, thumbnail);
         Set<Images> imagesSet = new HashSet<>();
-        if (Objects.nonNull(imagesSet)){
-            fileMap.forEach((fileName, fileUrl) -> {
-                Images images = new Images();
-                images.setImageUrl(fileUrl);
-                images.setIsDeleted(false);
-                imagesSet.add(images);
-            });
+        if (Objects.nonNull(imagesSet)) {
+            Images images = new Images();
+            images.setImageUrl(dishRequest.getImages());
+            images.setIsDeleted(false);
+            imagesSet.add(images);
+            imagesRepository.save(images);
         }
         dish.setImages(imagesSet);
         dish.setAmount(dishRequest.getAmount());
@@ -126,25 +113,25 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public PaginationResponse<Dish> getListDish(PagingRequest pagingRequest) {
+    public PaginationResponse<DishDTO> getListDish(PagingRequest pagingRequest) {
         Specification<Dish> specification = doPredicate(pagingRequest);
         Pageable pageable = PageRequest.of(pagingRequest.getPageNumber() - 1, pagingRequest.getPageSize());
         Page<Dish> dishPage = dishRepository.findAll(specification, pageable);
-        List<Dish> dishes = DishDtoMapper(dishPage.getContent());
+        List<DishDTO> dishes = DishDtoMapper(dishPage.getContent());
         SummaryPaginationResponse summaryPaginationResponse = SummaryPaginationResponse.builder()
                 .count(dishPage.getNumberOfElements())
                 .total(dishPage.getTotalElements())
                 .index(pagingRequest.getPageNumber())
                 .totalPage(dishPage.getTotalPages())
                 .build();
-        PaginationResponse<Dish> response = new PaginationResponse<>();
-        response.setSummaryPaginationResponse(summaryPaginationResponse);
+        PaginationResponse<DishDTO> response = new PaginationResponse<>();
+        response.setSummary(summaryPaginationResponse);
         response.setData(dishes);
         return response;
     }
 
     @Override
-    public Dish getDishDetail(Long id) {
+    public DishDTO getDishDetail(Long id) {
         Dish dish = dishRepository.findByIdAndIsDeleted(id, false);
         if (dish == null){
             throw new RuntimeException("Món ăn không tồn tại!");
@@ -153,10 +140,9 @@ public class DishServiceImpl implements DishService {
         if(Objects.nonNull(dish.getImages())) {
             dishImage = imageMapper(dish.getImages());
         }
-        Dish newDish = new Dish();
+        DishDTO newDish = new DishDTO();
         BeanUtils.copyProperties(dish, newDish);
         newDish.setImages(dishImage);
-
         return newDish;
     }
 
@@ -188,14 +174,23 @@ public class DishServiceImpl implements DishService {
         });
     }
 
-    private List<Dish> DishDtoMapper (List<Dish> dishList){
+    private List<DishDTO> DishDtoMapper (List<Dish> dishList){
 
-        List<Dish> dishDTOList = new LinkedList<>();
-        if(Objects.nonNull(dishList)){
-            for(Dish dish : dishList){
-                Dish dishDto = new Dish();
-                BeanUtils.copyProperties(dish, dishDto);
-                dishDTOList.add(dishDto);
+        List<DishDTO> dishDTOList = new LinkedList<>();
+        Set<Images> dishImage = null;
+        if(Objects.nonNull(dishList)) {
+            for (Dish dish : dishList) {
+                DishDTO dishDto = new DishDTO();
+                if(imagesRepository.findByDishIdAndIsDeleted(dish.getId(), false) == null){
+                    dish.setImages(null);
+                }
+                else {
+                    dish.setImages(imagesRepository.findByDishAndIsDeleted(dish.getId(), false));
+                }
+                if(!dish.getDeleted()){
+                    BeanUtils.copyProperties(dish, dishDto);
+                    dishDTOList.add(dishDto);
+                }
             }
         }
         return dishDTOList;
