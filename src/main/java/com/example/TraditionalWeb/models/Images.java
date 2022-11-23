@@ -2,6 +2,7 @@ package com.example.TraditionalWeb.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
+@Getter
 public class Images {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,23 +27,8 @@ public class Images {
     private Boolean isDeleted;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dish_id")
+    @JoinColumn(name = "id_product")
     @JsonIgnore
-    private Dish dishId;
+    private Product product;
 
-    public Long getId() {
-        return id;
-    }
-
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public Dish getDishId() {
-        return dishId;
-    }
 }

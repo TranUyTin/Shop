@@ -1,6 +1,7 @@
 package com.example.TraditionalWeb.models.request;
 
-import com.example.TraditionalWeb.models.DishType;
+
+import com.example.TraditionalWeb.models.Brand;
 import com.example.TraditionalWeb.models.Images;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
@@ -15,19 +16,19 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DishRequest {
+public class ProductRequest {
     @NotNull
     private String name;
 
     private String description;
     @NotNull
-    private int price;
+    private Long cost;
     @NotNull
-    private int amount;
+    private Long quantity;
 
-    private Boolean isDeleted;
+    private String brand;
     @NotNull
-    private String dishType;
+    private String productType;
     @NotNull
     private String images;
 }

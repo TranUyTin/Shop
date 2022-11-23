@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -21,6 +23,7 @@ public class Bill {
     private Long id;
 
     @Column(name = "create_date")
+    @CreationTimestamp
     private Timestamp createdAt;
 
     @Column(name = "status")

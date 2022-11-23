@@ -39,7 +39,6 @@ public class User {
     private String email;
 
     @Column(name = "is_admin")
-    @JsonProperty(value = "isAdmin")
     private Boolean isAdmin = false;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})

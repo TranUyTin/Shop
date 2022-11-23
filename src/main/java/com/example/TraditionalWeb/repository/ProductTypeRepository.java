@@ -1,6 +1,6 @@
 package com.example.TraditionalWeb.repository;
 
-import com.example.TraditionalWeb.models.DishType;
+import com.example.TraditionalWeb.models.ProductType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -12,17 +12,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface DishTypeRepository extends JpaRepository<DishType, Long>, JpaSpecificationExecutor<DishType> {
-    DishType findByName(String name);
+public interface ProductTypeRepository extends JpaRepository<ProductType, String>, JpaSpecificationExecutor<ProductType> {
+    ProductType findByName(String name);
 
-    DishType findByIdAndIsDeleted(Long id, boolean isDeleted);
+    ProductType findByIdAndIsDeleted(Long id, boolean isDeleted);
 
-    DishType findByNameAndIsDeleted(String name, boolean isDeleted);
+    ProductType findByNameAndIsDeleted(String name, boolean isDeleted);
 
-    List<DishType> findAll();
+    List<ProductType> findAll();
 
     @Override
-    Page<DishType> findAll(Specification<DishType> spec, Pageable pageable);
+    Page<ProductType> findAll(Specification<ProductType> spec, Pageable pageable);
 
     Boolean existsByName(String name);
 

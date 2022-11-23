@@ -1,7 +1,6 @@
 package com.example.TraditionalWeb.repository;
 
 import com.example.TraditionalWeb.models.Bill;
-import com.example.TraditionalWeb.models.Dish;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

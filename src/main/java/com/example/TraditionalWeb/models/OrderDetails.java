@@ -2,7 +2,9 @@ package com.example.TraditionalWeb.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -10,6 +12,8 @@ import javax.persistence.*;
 @Table(name = "order-details")
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class OrderDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +21,8 @@ public class OrderDetails {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "dish_id")
-    private Dish dish;
+    @JoinColumn(name = "id_product")
+    private Product product;
 
     @Column(name = "amount")
     private int amount;
@@ -28,19 +32,4 @@ public class OrderDetails {
     @JsonIgnore
     private Bill bill;
 
-    public Long getId() {
-        return id;
-    }
-
-    public Bill getBill() {
-        return bill;
-    }
-
-    public Dish getDish() {
-        return dish;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
 }

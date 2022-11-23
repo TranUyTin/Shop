@@ -1,15 +1,14 @@
 package com.example.TraditionalWeb.controller;
 
-import com.example.TraditionalWeb.dto.DishDTO;
+import com.example.TraditionalWeb.dto.ProductDTO;
 import com.example.TraditionalWeb.exception.UserException;
-import com.example.TraditionalWeb.models.Dish;
-import com.example.TraditionalWeb.models.request.DishRequest;
+import com.example.TraditionalWeb.models.Product;
 import com.example.TraditionalWeb.models.request.PagingRequest;
+import com.example.TraditionalWeb.models.request.ProductRequest;
 import com.example.TraditionalWeb.models.response.PaginationResponse;
-import com.example.TraditionalWeb.service.DishService;
+import com.example.TraditionalWeb.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,22 +16,22 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @Controller
-@RequestMapping(value = "/dish")
+@RequestMapping(value = "/product")
 @Slf4j
-public class DishController {
+public class ProductController {
     @Autowired
-    private DishService dishService;
+    private ProductService productService;
 
     @GetMapping(value = "/list")
-    public ResponseEntity<?> getListDish(PagingRequest pagingRequest){
-        PaginationResponse<DishDTO> dishList = dishService.getListDish(pagingRequest);
-        return ResponseEntity.ok(dishList);
+    public ResponseEntity<?> getListProduct(PagingRequest pagingRequest){
+        PaginationResponse<ProductDTO> productList = productService.getListProduct(pagingRequest);
+        return ResponseEntity.ok(productList);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> getDishDetail(@PathVariable Long id){
+    public ResponseEntity<?> getProductDetail(@PathVariable Long id){
         try {
-            DishDTO dish = dishService.getDishDetail(id);
+            ProductDTO dish = productService.getProductDetail(id);
             return ResponseEntity.ok(dish);
         } catch (RuntimeException e) {
             return ResponseEntity.ok(e.getMessage());
@@ -41,19 +40,17 @@ public class DishController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> createDish(@ModelAttribute DishRequest dishRequest) throws IOException {
-        try{
-            Dish dish = dishService.createDish(dishRequest);
+    public ResponseEntity<?> createProduct(@RequestBody ProductRequest dishRequest){
+
+            Product product = productService.createProduct(dishRequest);
             return ResponseEntity.ok("Tạo món ăn thành công");
-        }
-        catch (UserException e) {
-            return ResponseEntity.ok(e.getMessage());
-        }
+
+
     }
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateDish(@PathVariable Long id, DishRequest dishRequest) throws IOException {
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, ProductRequest productRequest){
         try {
-            Dish dish = dishService.updateDish(id, dishRequest);
+            Product product = productService.updateProduct(id, productRequest);
             return  ResponseEntity.ok("Cập nhật món ăn thành công");
         } catch (UserException e){
             return ResponseEntity.ok(e.getMessage());
@@ -62,9 +59,9 @@ public class DishController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteDish(@PathVariable Long id){
+    public ResponseEntity<?> deleteProduct(@PathVariable Long id){
         try {
-            Dish dish = dishService.deleteDish(id);
+            Product product = productService.deleteProduct(id);
             return ResponseEntity.ok("Xóa món ăn thành công!");
         } catch (RuntimeException e){
             return ResponseEntity.ok(e.getMessage());

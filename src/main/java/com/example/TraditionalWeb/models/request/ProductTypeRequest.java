@@ -1,6 +1,5 @@
 package com.example.TraditionalWeb.models.request;
 
-import com.example.TraditionalWeb.models.Dish;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +11,6 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DishTypeRequest {
+public class ProductTypeRequest {
     private String name;
-    private String description;
-    private String isDeleted;
 }
