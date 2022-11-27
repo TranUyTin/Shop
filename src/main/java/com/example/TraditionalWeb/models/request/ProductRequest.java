@@ -19,12 +19,11 @@ import java.util.Set;
 public class ProductRequest {
     @NotNull
     private String name;
-
-    private String description;
     @NotNull
     private Long cost;
     @NotNull
     private Long quantity;
+    private String specifications;
 
     private String brand;
     @NotNull

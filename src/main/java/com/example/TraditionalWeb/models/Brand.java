@@ -7,10 +7,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "branch")
+@Table(name = "brand")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -22,12 +23,19 @@ public class Brand {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "brands", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JsonIgnore
-    private Set<Product> products;
+    @Column(name = "full_name")
+    private String fullName;
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "product-type", referencedColumnName = "id")
-//    private ProductType productType;
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
+    @OneToMany(mappedBy = "brands", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Product> products = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "product_type")
+    @JsonIgnore
+    private ProductType productType;
 
 }

@@ -7,6 +7,7 @@ import com.example.TraditionalWeb.models.request.PagingRequest;
 import com.example.TraditionalWeb.models.request.ProductRequest;
 import com.example.TraditionalWeb.models.response.PaginationResponse;
 import com.example.TraditionalWeb.models.response.SummaryPaginationResponse;
+import com.example.TraditionalWeb.repository.BrandRepository;
 import com.example.TraditionalWeb.repository.ImagesRepository;
 import com.example.TraditionalWeb.repository.ProductRepository;
 import com.example.TraditionalWeb.repository.ProductTypeRepository;
@@ -37,6 +38,9 @@ public class ProductServiceImpl implements ProductService {
     ProductTypeRepository productTypeRepository;
 
     @Autowired
+    BrandRepository brandRepository;
+
+    @Autowired
     ImagesRepository imagesRepository;
 
     @Value("${images.thumbnail.size}")
@@ -46,16 +50,23 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product createProduct(ProductRequest productRequest) {
         Product product = new Product();
-        if(productRepository.existsByNameAndIsDeleted(productRequest.getName(), false)){
+        if(productRepository.existsByNameAndIsDeleted(productRequest.getName(), "False")){
             throw new UserException("400", "Tên đã tồn tại!");
         }
-        product.setName(productRequest.getName());
-//        if(!productTypeRepository.existsByNameAndIsDeleted(productRequest.getProductType(),false)) {
-//            throw new UserException("400", "Loại món ăn không tồn tại!");
-//        }
-//        else {
-//            product.setProductType(productTypeRepository.findByNameAndIsDeleted(productRequest.getProductType(), false));
-//        }
+
+        if(!brandRepository.existsByNameAndIsDeleted(productRequest.getBrand(),false)) {
+            throw new UserException("400", "Thuong hieu không tồn tại!");
+        }
+        else {
+            product.setBrands(brandRepository.findByNameAndIsDeleted(productRequest.getBrand(), false));
+        }
+
+
+        product.setQuantity(productRequest.getQuantity());
+        product.setIsDeleted("False");
+        product.setSpecifications((productRequest.getSpecifications()));
+        product.setCost(productRequest.getCost());
+        productRepository.save(product);
         Set<Images> imagesSet = new HashSet<>();
         if (Objects.nonNull(imagesSet)) {
             Images images = new Images();
@@ -65,9 +76,6 @@ public class ProductServiceImpl implements ProductService {
             imagesSet.add(images);
         }
         product.setImages(imagesSet);
-        product.setQuantity(productRequest.getQuantity());
-        product.setIsDeleted("False");
-        product.setCost(productRequest.getCost());
         productRepository.save(product);
         return product;
     }
@@ -79,19 +87,19 @@ public class ProductServiceImpl implements ProductService {
             throw new UserException("400", "Món ăn không tồn tại!");
         }
         else {
-            product = productRepository.findByIdAndIsDeleted(id, false);
+            product = productRepository.findByIdAndIsDeleted(id, "False");
         }
 
         if(productRepository.existsByName(productRequest.getName())){
             throw new UserException("400", "Tên đã tồn tại!");
         }
         product.setName(productRequest.getName());
-//        if(!productTypeRepository.existsByNameAndIsDeleted(productRequest.getProductType(),false)) {
-//            throw new UserException("400", "Loại món ăn không tồn tại!");
-//        }
-//        else {
-//            product.setProductType(productTypeRepository.findByNameAndIsDeleted(productRequest.getProductType(), false));
-//        }
+        if(!productTypeRepository.existsByNameAndIsDeleted(productRequest.getProductType(),false)) {
+            throw new UserException("400", "Loại món ăn không tồn tại!");
+        }
+        else {
+            product.setProductTypes(productTypeRepository.findByNameAndIsDeleted(productRequest.getProductType(), false));
+        }
         Set<Images> imagesSet = new HashSet<>();
         if (Objects.nonNull(imagesSet)) {
             Images images = new Images();
@@ -127,7 +135,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO getProductDetail(Long id) {
-        Product product = productRepository.findByIdAndIsDeleted(id, false);
+        Product product = productRepository.findByIdAndIsDeleted(id, "False");
         if (product == null){
             throw new RuntimeException("Món ăn không tồn tại!");
         }
@@ -143,7 +151,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product deleteProduct(Long id) {
-        Product dish = productRepository.findByIdAndIsDeleted(id, false);
+        Product dish = productRepository.findByIdAndIsDeleted(id, "False");
         if (dish == null){
             throw new RuntimeException("Món ăn không tồn tại!");
         }

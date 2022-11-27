@@ -12,5 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductTypeRequest {
+    private Long id;
     private String name;
+    private String fullName;
 }

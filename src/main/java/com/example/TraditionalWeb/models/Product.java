@@ -17,7 +17,7 @@ import java.util.Set;
 @Getter
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_product")
     private Long id;
 
@@ -27,10 +27,13 @@ public class Product {
     @Column(name = "quantity")
     private Long quantity;
 
+    @Column(name = "specifications")
+    private String specifications;
+
     @Column(name = "cost")
     private Long cost;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "brand")
     @JsonIgnore
     private Brand brands;
@@ -38,10 +41,10 @@ public class Product {
     @Column(name = "is_deleted")
     private String isDeleted;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "product_type")
-//    @JsonIgnore
-//    private ProductType productType;
+    @ManyToOne
+    @JoinColumn(name = "product_type")
+    @JsonIgnore
+    private ProductType productTypes;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JsonIgnore

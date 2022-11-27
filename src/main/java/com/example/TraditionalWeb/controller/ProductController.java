@@ -41,9 +41,13 @@ public class ProductController {
 
     @PostMapping()
     public ResponseEntity<?> createProduct(@RequestBody ProductRequest dishRequest){
+            try {
+                Product product = productService.createProduct(dishRequest);
+                return ResponseEntity.ok("Tạo món ăn thành công");
+            }catch (UserException e) {
+                return ResponseEntity.ok(e.getMessage());
+            }
 
-            Product product = productService.createProduct(dishRequest);
-            return ResponseEntity.ok("Tạo món ăn thành công");
 
 
     }

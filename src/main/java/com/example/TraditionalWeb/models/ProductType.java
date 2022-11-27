@@ -8,10 +8,11 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "product-type")
+@Table(name = "product_type")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -23,18 +24,20 @@ public class ProductType {
     private String name;
 
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
-//    @OneToMany(mappedBy = "productType", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-//    @JsonIgnore
-//    private Set<Product> products;
-//
-//    @OneToMany(mappedBy = "productType", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-//    @JsonIgnore
-//    private Set<Brand> brands;
+    @Column(name = "full_name")
+    private String fullName;
+
+    @OneToMany(mappedBy = "productTypes", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Product> products = new HashSet<>();
+
+    @OneToMany(mappedBy = "productType", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Brand> brands = new HashSet<>();
 
 }

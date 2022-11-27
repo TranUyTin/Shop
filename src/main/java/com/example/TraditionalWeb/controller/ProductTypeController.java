@@ -20,14 +20,14 @@ public class ProductTypeController {
     private ProductTypeService productTypeService;
 
     @GetMapping(value = "/list")
-    public ResponseEntity<?> getListProductType(){
-        PaginationResponse<ProductType> productTypePaginationResponse = productTypeService.getListProductType();
+    public ResponseEntity<?> getListProductType(PagingRequest pagingRequest){
+        PaginationResponse<ProductType> productTypePaginationResponse = productTypeService.getListProductType(pagingRequest);
         return ResponseEntity.ok(productTypePaginationResponse);
     }
 
     @GetMapping
-    public ResponseEntity<?> getProductTypeDetail(@RequestParam(name = "id") String name){
-        ProductType productType = productTypeService.getProductTypeDetail(name);
+    public ResponseEntity<?> getProductTypeDetail(@RequestParam(name = "id") Long id){
+        ProductTypeDTO productType = productTypeService.getProductTypeDetail(id);
         return ResponseEntity.ok(productType);
     }
 

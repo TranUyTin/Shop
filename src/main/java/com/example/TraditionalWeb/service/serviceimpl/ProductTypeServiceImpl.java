@@ -1,6 +1,7 @@
 package com.example.TraditionalWeb.service.serviceimpl;
 
 import com.example.TraditionalWeb.dto.ProductTypeDTO;
+import com.example.TraditionalWeb.models.Brand;
 import com.example.TraditionalWeb.models.Product;
 import com.example.TraditionalWeb.models.ProductType;
 import com.example.TraditionalWeb.models.request.PagingRequest;
@@ -29,9 +30,13 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     @Override
     public String createProductType(ProductTypeRequest productTypeRequest) {
         ProductType productType = new ProductType();
-
+        while (productTypeRepository.findByIdAndIsDeleted(productTypeRequest.getId(), false) != null){
+            productTypeRequest.setId(productTypeRequest.getId()+1);
+        }
         productType.setName(productTypeRequest.getName());
         productType.setIsDeleted(false);
+        productType.setId(productTypeRequest.getId());
+        productType.setFullName(productTypeRequest.getFullName());
         productTypeRepository.save(productType);
         return "chuc mung";
     }
@@ -45,41 +50,41 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         if(productTypeRepository.existsByName(productTypeRequest.getName())){
             throw new RuntimeException("Tên đã tồn tại!");
         }
-        productType.setName(productTypeRequest.getName());
+        productType.setFullName(productTypeRequest.getFullName());
         productTypeRepository.save(productType);
         return productType;
     }
 
     @Override
-    public ProductType getProductTypeDetail(String name) {
-        ProductType productType = productTypeRepository.findByNameAndIsDeleted(name, false);
+    public ProductTypeDTO getProductTypeDetail(Long id) {
+        ProductType productType = productTypeRepository.findByIdAndIsDeleted(id, false);
         if (productType == null){
             throw new RuntimeException("Loại món ăn không tồn tại!");
         }
-//        Set<Product> productSet = null;
-//        if (Objects.nonNull(productType.getProducts())){
-//            productSet = productMapper(productType.getProducts());
-//        }
-        ProductType newDishType = new ProductType();
+        Set<Brand> brandSet = null;
+        if (Objects.nonNull(productType.getBrands())){
+            brandSet = brandMapper(productType.getBrands());
+        }
+        ProductTypeDTO newDishType = new ProductTypeDTO();
         BeanUtils.copyProperties(productType, newDishType);
-//        newDishType.setProducts(productSet);
+        newDishType.setBrands(brandSet);
         return newDishType;
     }
 
     @Override
-    public PaginationResponse<ProductType> getListProductType() {
-//        Specification<ProductType> specification = doPredicate(pagingRequest);
-//        Pageable pageable = PageRequest.of(pagingRequest.getPageNumber() - 1, pagingRequest.getPageSize() );
-//        Page<ProductType> productTypePage = productTypeRepository.findAll(specification, pageable);
+    public PaginationResponse<ProductType> getListProductType(PagingRequest pagingRequest) {
+        Specification<ProductType> specification = doPredicate(pagingRequest);
+        Pageable pageable = PageRequest.of(pagingRequest.getPageNumber() - 1, pagingRequest.getPageSize() );
+        Page<ProductType> productTypePage = productTypeRepository.findAll(specification, pageable);
         List<ProductType> productTypeList = productTypeRepository.findAll();
-//        SummaryPaginationResponse summaryPaginationResponse = SummaryPaginationResponse.builder()
-//                .count(productTypePage.getNumberOfElements())
-//                .total(productTypePage.getTotalElements())
-//                .index(pagingRequest.getPageNumber())
-//                .totalPage(productTypePage.getTotalPages())
-//                .build();
+        SummaryPaginationResponse summaryPaginationResponse = SummaryPaginationResponse.builder()
+                .count(productTypePage.getNumberOfElements())
+                .total(productTypePage.getTotalElements())
+                .index(pagingRequest.getPageNumber())
+                .totalPage(productTypePage.getTotalPages())
+                .build();
         PaginationResponse<ProductType> response = new PaginationResponse<>();
-//        response.setSummary(summaryPaginationResponse);
+        response.setSummary(summaryPaginationResponse);
         response.setData(productTypeList);
         return response;
     }
@@ -112,7 +117,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         });
     }
 
-    private List<ProductTypeDTO> ProductDtoMapper (List<ProductType> productTypeList){
+    private List<ProductTypeDTO> ProductTypeDtoMapper (List<ProductType> productTypeList){
 
         List<ProductTypeDTO> productTypeDTOList = new LinkedList<>();
         if(Objects.nonNull(productTypeList)){
@@ -128,13 +133,13 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         return productTypeDTOList;
     }
 
-    private Set<Product> productMapper(Set<Product> productList){
-        Set<Product> productSet = new HashSet<>();
-        productList.forEach((product -> {
-            Product products = new Product();
-            BeanUtils.copyProperties(product, products);
-            productSet.add(products);
+    private Set<Brand> brandMapper(Set<Brand> brands){
+        Set<Brand> brandSet = new HashSet<>();
+        brands.forEach((brand -> {
+            Brand brand1 = new Brand();
+            BeanUtils.copyProperties(brand, brand1);
+            brandSet.add(brand1);
         }));
-        return productSet;
+        return brandSet;
     }
 }

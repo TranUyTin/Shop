@@ -20,7 +20,7 @@ public class Images {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "imageurl")
+    @Column(name = "image")
     private String imageUrl;
 
     @Column(name = "is_deleted")

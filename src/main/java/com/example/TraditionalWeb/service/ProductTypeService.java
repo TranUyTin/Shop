@@ -13,9 +13,9 @@ public interface ProductTypeService {
 
     ProductType updateProductType(Long id, ProductTypeRequest dishTypeRequest);
 
-    ProductType getProductTypeDetail(String name);
+    ProductTypeDTO getProductTypeDetail(Long id);
 
-    PaginationResponse<ProductType> getListProductType();
+    PaginationResponse<ProductType> getListProductType(PagingRequest pagingRequest);
 
     ProductType deleteProductType(Long id);
 
