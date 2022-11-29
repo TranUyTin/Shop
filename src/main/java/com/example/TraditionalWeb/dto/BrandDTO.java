@@ -24,7 +24,7 @@ public class BrandDTO {
 
     private Boolean isDeleted;
 
-    private Set<Product> products = new HashSet<>();
+    private Set<ProductDTO> products = new HashSet<>();
 
     private ProductType productType;
 }

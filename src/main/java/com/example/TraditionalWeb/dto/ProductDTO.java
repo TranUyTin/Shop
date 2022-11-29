@@ -20,7 +20,8 @@ public class ProductDTO {
     public Long cost;
     public Long quantity;
     public String isDeleted;
+    public String specifications;
 //    public ProductType productType;
 //    public Brand brands;
-//    public Set<Images> images;
+    public Set<Images> images;
 }

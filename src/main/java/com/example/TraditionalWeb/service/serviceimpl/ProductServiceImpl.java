@@ -184,15 +184,10 @@ public class ProductServiceImpl implements ProductService {
         if(Objects.nonNull(productList)) {
             for (Product product : productList) {
                 ProductDTO productDto = new ProductDTO();
-                if(imagesRepository.findByProductAndIsDeleted(product.getId(), false) == null){
-                    product.setImages(null);
-                }
-                else {
-                    product.setImages(imagesRepository.findByProductAndIsDeleted(product.getId(), false));
-                }
-
                 if(product.getIsDeleted().equalsIgnoreCase("False")){
+                    Set<Images> imagesSet = imageMapper(product.getImages());
                     BeanUtils.copyProperties(product, productDto);
+                    productDto.setImages(imagesSet);
                     productDTOList.add(productDto);
                 }
             }

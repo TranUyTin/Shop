@@ -1,8 +1,10 @@
 package com.example.TraditionalWeb.service.serviceimpl;
 
 import com.example.TraditionalWeb.dto.BrandDTO;
+import com.example.TraditionalWeb.dto.ProductDTO;
 import com.example.TraditionalWeb.dto.ProductTypeDTO;
 import com.example.TraditionalWeb.models.Brand;
+import com.example.TraditionalWeb.models.Images;
 import com.example.TraditionalWeb.models.Product;
 import com.example.TraditionalWeb.models.ProductType;
 import com.example.TraditionalWeb.models.request.BrandRequest;
@@ -84,7 +86,7 @@ public class BrandServiceImpl implements BrandService {
         if(brand == null) {
             throw new RuntimeException("Thuong hieu khong ton tai");
         }
-        Set<Product> productSet = null;
+        Set<ProductDTO> productSet = null;
         if (Objects.nonNull(brand.getProducts())){
             productSet = productMapper(brand.getProducts());
         }
@@ -158,12 +160,14 @@ public class BrandServiceImpl implements BrandService {
         return brandDTOList;
     }
 
-    private Set<Product> productMapper(Set<Product> products) {
-        Set<Product> productSet = new HashSet<>();
+    private Set<ProductDTO> productMapper(Set<Product> products) {
+        Set<ProductDTO> productSet = new HashSet<>();
         products.forEach((product -> {
-            Product product1 = new Product();
-            BeanUtils.copyProperties(product, product1);
-            productSet.add(product1);
+            if(product.getIsDeleted().equalsIgnoreCase("False")) {
+                ProductDTO product1 = new ProductDTO();
+                BeanUtils.copyProperties(product, product1);
+                productSet.add(product1);
+            }
         }));
         return productSet;
     }
@@ -173,14 +177,18 @@ public class BrandServiceImpl implements BrandService {
         if(Objects.nonNull(brandDTOList)) {
             for (Brand brand : brandList) {
                 BrandDTO brandDTO = new BrandDTO();
-                if(productRepository.findByBrandsAndIsDeleted(brand.getName(), "False") == null) {
-                    brand.setProducts(null);
-                }
-                else {
-                    brand.setProducts(productRepository.findByBrandsAndIsDeleted(brand.getName(),"False"));
-                }
                 if (!brand.getIsDeleted()) {
+
                     BeanUtils.copyProperties(brand, brandDTO);
+                    Set<ProductDTO> productDTOSet = new HashSet<>();
+                    brand.getProducts().forEach(product -> {
+                        if (product.getIsDeleted() == "False") {
+                            ProductDTO productDTO = new ProductDTO();
+                            BeanUtils.copyProperties(product, productDTO);
+                            productDTOSet.add(productDTO);
+                        }
+                    });
+                    brandDTO.setProducts(productDTOSet);
                     brandDTOList.add(brandDTO);
                 }
             }

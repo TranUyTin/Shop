@@ -31,7 +31,7 @@ public class Brand {
 
     @OneToMany(mappedBy = "brands", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Product> products = new HashSet<>();
+    private Set<Product> products  = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "product_type")
