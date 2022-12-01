@@ -27,7 +27,7 @@ public class OrderDetailsController {
     @PostMapping(value = "/order-details")
     public ResponseEntity<?> addProductToOrderDetails(@RequestBody OrderDetailRequest orderDetailRequest) {
         OrderDetails orderDetails = orderDetailService.addProductToOrderDetail(orderDetailRequest);
-        return ResponseEntity.ok(orderDetails);
+        return ResponseEntity.ok("Đã thêm sản phẩm vào giỏ hàng!");
     }
 
     @PutMapping(value = "/increase/{id}")
@@ -45,6 +45,6 @@ public class OrderDetailsController {
     @DeleteMapping(value = "/order-details/delete/{id}")
     public ResponseEntity<?> deleteOrderDetails(@PathVariable Long id) {
         OrderDetails orderDetails = orderDetailService.deleteOrderDetails(id);
-        return ResponseEntity.ok(orderDetails);
+        return ResponseEntity.ok("Đã xóa sản phẩm từ giỏ hàng!");
     }
 }
