@@ -28,4 +28,10 @@ public class BillController {
         Bill bill = billService.createBill(billRequest);
         return ResponseEntity.ok(bill);
     }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<?> getBillById(@PathVariable Long id) {
+        Bill bill = billService.getBillDetail(id);
+        return ResponseEntity.ok(bill);
+    }
 }
