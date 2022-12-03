@@ -42,4 +42,6 @@ public class OrderDetails {
     @JsonIgnore
     private Cart cart;
 
+    @Column(name = "total")
+    private Long total;
 }

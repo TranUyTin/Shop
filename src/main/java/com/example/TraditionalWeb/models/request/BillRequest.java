@@ -13,9 +13,11 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BillRequest {
-    private Boolean status;
-    private Boolean statusDelivery;
-    private int total;
-    private Set<OrderDetails> orderDetails;
-    private Long userId;
+//    private Boolean status;
+//    private Boolean statusDelivery;
+//    private Long total;
+//    private Set<OrderDetails> orderDetails;
+//    private Long userId;
+    private Long cartId;
+    private String username;
 }

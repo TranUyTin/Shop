@@ -12,4 +12,6 @@ public interface OrderDetailService {
     OrderDetails increaseAmount(Long id);
     OrderDetails decreaseAmount(Long id);
     OrderDetails deleteOrderDetails(Long id);
+
+    String cleanOrderDetailsInCart(Long cartId);
 }

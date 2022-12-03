@@ -42,10 +42,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             orderDetails.setCart(cart);
             orderDetails.setProduct(product);
             orderDetails.setAmount(1);
+            orderDetails.setTotal(product.getCost());
             orderDetailRepository.save(orderDetails);
             return orderDetails;
         } else {
             orderDetailsInDB.setAmount(orderDetailsInDB.getAmount() + 1);
+            orderDetailsInDB.setTotal(orderDetailsInDB.getTotal() + product.getCost());
+            orderDetailRepository.save(orderDetailsInDB);
             return orderDetailsInDB;
         }
     }
@@ -53,8 +56,11 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Override
     public OrderDetails increaseAmount(Long id) {
         OrderDetails orderDetails = orderDetailRepository.findByIdAndIsDeleted(id, false);
+        Product productInOD = orderDetails.getProduct();
         if (orderDetails != null) {
             orderDetails.setAmount(orderDetails.getAmount() + 1);
+            orderDetails.setTotal(orderDetails.getTotal() + productInOD.getCost());
+            orderDetailRepository.save(orderDetails);
             return orderDetails;
         } else {
             return null;
@@ -64,8 +70,11 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Override
     public OrderDetails decreaseAmount(Long id) {
         OrderDetails orderDetails = orderDetailRepository.findByIdAndIsDeleted(id, false);
+        Product productInOD = orderDetails.getProduct();
         if (orderDetails != null) {
             orderDetails.setAmount(orderDetails.getAmount() - 1);
+            orderDetails.setTotal(orderDetails.getTotal() - productInOD.getCost());
+            orderDetailRepository.save(orderDetails);
             return orderDetails;
         } else {
             return null;
@@ -76,7 +85,17 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public OrderDetails deleteOrderDetails(Long id) {
         OrderDetails orderDetails = orderDetailRepository.findByIdAndIsDeleted(id, false);
         orderDetails.setDeleted(true);
+        orderDetailRepository.save(orderDetails);
         orderDetailRepository.delete(orderDetails);
         return orderDetails;
+    }
+
+    @Override
+    public String cleanOrderDetailsInCart(Long cartId) {
+        Set<OrderDetails> orderDetailsSet = orderDetailRepository.getOrderDetailByCart(cartId);
+        for (OrderDetails orderDetails : orderDetailsSet) {
+            orderDetailRepository.delete(orderDetails);
+        }
+        return "Giỏ hàng trống";
     }
 }

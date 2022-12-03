@@ -33,7 +33,7 @@ public class Bill {
     private Boolean statusDelivery;
 
     @Column(name = "total")
-    private int total;
+    private Long total;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
@@ -46,6 +46,11 @@ public class Bill {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id")
+    @JsonIgnore
+    private Cart cart;
 
     public Set<OrderDetails> getOrderDetails() { return orderDetails;}
 
@@ -65,7 +70,7 @@ public class Bill {
         return statusDelivery;
     }
 
-    public int getTotal() {
+    public Long getTotal() {
         return total;
     }
 

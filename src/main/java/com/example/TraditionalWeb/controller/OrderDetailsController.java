@@ -24,7 +24,7 @@ public class OrderDetailsController {
         return ResponseEntity.ok(orderDetailsSet);
     }
 
-    @PostMapping(value = "/order-details")
+    @PostMapping(value = "/create")
     public ResponseEntity<?> addProductToOrderDetails(@RequestBody OrderDetailRequest orderDetailRequest) {
         OrderDetails orderDetails = orderDetailService.addProductToOrderDetail(orderDetailRequest);
         return ResponseEntity.ok("Đã thêm sản phẩm vào giỏ hàng!");
@@ -42,9 +42,15 @@ public class OrderDetailsController {
         return ResponseEntity.ok(orderDetails);
     }
 
-    @DeleteMapping(value = "/order-details/delete/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<?> deleteOrderDetails(@PathVariable Long id) {
         OrderDetails orderDetails = orderDetailService.deleteOrderDetails(id);
         return ResponseEntity.ok("Đã xóa sản phẩm từ giỏ hàng!");
+    }
+
+    @DeleteMapping(value = "/clean-cart/{cartId}")
+    public ResponseEntity<?> cleanOrderDetailsInCart(@PathVariable Long cartId) {
+        String cleanOD = orderDetailService.cleanOrderDetailsInCart(cartId);
+        return ResponseEntity.ok(cleanOD);
     }
 }
