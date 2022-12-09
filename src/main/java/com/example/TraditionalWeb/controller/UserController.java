@@ -26,6 +26,17 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @GetMapping(value ="/search")
+    public ResponseEntity<?> getUser(@RequestParam(name = "name") String name){
+        try {
+            List<User> user = userService.findByFullName(name);
+            return ResponseEntity.ok(user);
+        } catch (RuntimeException e) {
+            return ResponseEntity.ok(e.getMessage());
+        }
+
+    }
+
     @GetMapping(value = "/list")
     public ResponseEntity<?> getListUser(PagingRequest pagingRequest){
         PaginationResponse<User> userList = userService.getListUser(pagingRequest);

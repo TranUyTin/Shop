@@ -15,6 +15,10 @@ public interface ProductService {
 
     PaginationResponse<ProductDTO> getListProduct(PagingRequest pagingRequest);
 
+    PaginationResponse<ProductDTO> searchListProduct(PagingRequest pagingRequest, String name);
+
+    PaginationResponse<ProductDTO> searchListProductByBrand(PagingRequest pagingRequest, String brand);
+
     ProductDTO getProductDetail(Long id);
 
     Product deleteProduct(Long id);

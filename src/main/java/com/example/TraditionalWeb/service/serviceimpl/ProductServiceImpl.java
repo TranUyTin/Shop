@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -118,8 +119,57 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public PaginationResponse<ProductDTO> getListProduct(PagingRequest pagingRequest) {
         Specification<Product> specification = doPredicate(pagingRequest);
-        Pageable pageable = PageRequest.of(pagingRequest.getPageNumber(), pagingRequest.getPageSize());
+        Pageable pageable = PageRequest.of(pagingRequest.getPageNumber() - 1, pagingRequest.getPageSize(), Sort.by(pagingRequest.getSortColumn()) );
         Page<Product> productPage = productRepository.findAll(specification, pageable);
+        List<ProductDTO> products = DishDtoMapper(productPage.getContent());
+        SummaryPaginationResponse summaryPaginationResponse = SummaryPaginationResponse.builder()
+                .count(productPage.getNumberOfElements())
+                .total(productPage.getTotalElements())
+                .index(pagingRequest.getPageNumber())
+                .totalPage(productPage.getTotalPages())
+                .build();
+        PaginationResponse<ProductDTO> response = new PaginationResponse<>();
+        response.setSummary(summaryPaginationResponse);
+        response.setData(products);
+        return response;
+    }
+
+    @Override
+    public PaginationResponse<ProductDTO> searchListProduct(PagingRequest pagingRequest, String name) {
+        Specification<Product> specification = doPredicate(pagingRequest);
+        Pageable pageable = null;
+        if(pagingRequest.getIsAscSort()){
+            pageable = PageRequest.of(pagingRequest.getPageNumber() - 1, pagingRequest.getPageSize(), Sort.by(pagingRequest.getSortColumn()).ascending());
+        }
+        else {
+            pageable = PageRequest.of(pagingRequest.getPageNumber() - 1, pagingRequest.getPageSize(), Sort.by(pagingRequest.getSortColumn()).descending());
+        }
+
+        Page<Product> productPage = productRepository.findByName(name, "False", specification, pageable);
+        List<ProductDTO> products = DishDtoMapper(productPage.getContent());
+        SummaryPaginationResponse summaryPaginationResponse = SummaryPaginationResponse.builder()
+                .count(productPage.getNumberOfElements())
+                .total(productPage.getTotalElements())
+                .index(pagingRequest.getPageNumber())
+                .totalPage(productPage.getTotalPages())
+                .build();
+        PaginationResponse<ProductDTO> response = new PaginationResponse<>();
+        response.setSummary(summaryPaginationResponse);
+        response.setData(products);
+        return response;
+    }
+
+    @Override
+    public PaginationResponse<ProductDTO> searchListProductByBrand(PagingRequest pagingRequest, String brand) {
+        Specification<Product> specification = doPredicate(pagingRequest);
+        Pageable pageable = null;
+        if(pagingRequest.getIsAscSort()){
+            pageable = PageRequest.of(pagingRequest.getPageNumber() - 1, pagingRequest.getPageSize(), Sort.by(pagingRequest.getSortColumn()).ascending());
+        }
+        else {
+            pageable = PageRequest.of(pagingRequest.getPageNumber() - 1, pagingRequest.getPageSize(), Sort.by(pagingRequest.getSortColumn()).descending());
+        }
+        Page<Product> productPage = productRepository.findByBrand(brand, "False", specification, pageable);
         List<ProductDTO> products = DishDtoMapper(productPage.getContent());
         SummaryPaginationResponse summaryPaginationResponse = SummaryPaginationResponse.builder()
                 .count(productPage.getNumberOfElements())

@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         Specification<User> specification = this.doPredicate(pagingRequest);
         Pageable pageable      = PageRequest.of(pagingRequest.getPageNumber() - 1, pagingRequest.getPageSize());
         Page<User> pageUser      = userRepository.findAll(specification, pageable);
-        List<User>       users         = UserDtoMapper(pageUser.getContent());
+        List<User>       users         = pageUser.getContent();
         SummaryPaginationResponse summaryPaginationResponse = SummaryPaginationResponse.builder()
                 .count(pageUser.getNumberOfElements())
                 .total(pageUser.getTotalElements())
@@ -95,6 +95,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserException("400", "User not found username"));
+        return user;
+    }
+
+    @Override
+    public List<User> findByFullName(String name) {
+        List<User> user = userRepository.findByFullName(name);
+        if(user == null) {
+            throw new RuntimeException("Deo");
+        }
         return user;
     }
 }

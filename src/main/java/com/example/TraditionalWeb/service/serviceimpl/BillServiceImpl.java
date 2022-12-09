@@ -1,5 +1,6 @@
 package com.example.TraditionalWeb.service.serviceimpl;
 
+import com.example.TraditionalWeb.dto.BillDTO;
 import com.example.TraditionalWeb.exception.UserException;
 import com.example.TraditionalWeb.models.Bill;
 import com.example.TraditionalWeb.models.Cart;
@@ -10,9 +11,11 @@ import com.example.TraditionalWeb.models.request.PagingRequest;
 import com.example.TraditionalWeb.models.response.PaginationResponse;
 import com.example.TraditionalWeb.repository.BillRepository;
 import com.example.TraditionalWeb.repository.CartRepository;
+import com.example.TraditionalWeb.repository.OrderDetailRepository;
 import com.example.TraditionalWeb.repository.UserRepository;
 import com.example.TraditionalWeb.service.BillService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
@@ -28,18 +31,28 @@ public class BillServiceImpl implements BillService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    OrderDetailRepository orderDetailRepository;
     @Override
     public Bill createBill(BillRequest billRequest) {
-        Cart cart = cartRepository.findByIdAndIsDeleted(billRequest.getCartId(), false);
+        Cart cart = cartRepository.findByCartId(billRequest.getCartId());
+//        Cart cart = new Cart();
         Set<OrderDetails> orderDetailsSet = cart.getOrderDetails();
         User user = userRepository.findByUsername(billRequest.getUsername());
         Bill bill = new Bill();
+        bill.setTotal(0L);
         for (OrderDetails orderDetails : orderDetailsSet) {
             bill.setTotal(bill.getTotal() + orderDetails.getTotal());
         }
         bill.setCart(cart);
         bill.setUser(user);
+        bill.setIsDeleted(false);
         billRepository.save(bill);
+        for (OrderDetails orderDetails : orderDetailsSet) {
+            orderDetails.setBill(bill);
+            orderDetailRepository.save(orderDetails);
+        }
         return bill;
     }
 
@@ -66,9 +79,11 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public Bill getBillDetail(Long id) {
+    public BillDTO getBillDetail(Long id) {
         Bill bill = billRepository.findByIdAndIsDeleted(id, false);
-        return bill;
+        BillDTO billDTO = new BillDTO();
+        BeanUtils.copyProperties(bill, billDTO);
+        return billDTO;
     }
 
     @Override

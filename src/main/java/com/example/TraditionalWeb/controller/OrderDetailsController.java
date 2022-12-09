@@ -1,5 +1,6 @@
 package com.example.TraditionalWeb.controller;
 
+import com.example.TraditionalWeb.dto.OrderDetailDTO;
 import com.example.TraditionalWeb.models.OrderDetails;
 import com.example.TraditionalWeb.models.request.OrderDetailRequest;
 import com.example.TraditionalWeb.service.OrderDetailService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Set;
 @Controller
 @RequestMapping(value = "/order-details")
@@ -20,14 +22,19 @@ public class OrderDetailsController {
 
     @GetMapping(value = "/list/{id}")
     public ResponseEntity<?> getListByCart(@PathVariable Long id) {
-        Set<OrderDetails> orderDetailsSet = orderDetailService.getOrderDetailsList(id);
+        Set<OrderDetailDTO> orderDetailsSet = orderDetailService.getOrderDetailsList(id);
         return ResponseEntity.ok(orderDetailsSet);
     }
 
     @PostMapping(value = "/create")
     public ResponseEntity<?> addProductToOrderDetails(@RequestBody OrderDetailRequest orderDetailRequest) {
-        OrderDetails orderDetails = orderDetailService.addProductToOrderDetail(orderDetailRequest);
-        return ResponseEntity.ok("Đã thêm sản phẩm vào giỏ hàng!");
+        try{
+            OrderDetails orderDetails = orderDetailService.addProductToOrderDetail(orderDetailRequest);
+            return ResponseEntity.ok(orderDetails);
+        } catch (RuntimeException e) {
+            return ResponseEntity.ok("Lỗi!");
+        }
+
     }
 
     @PutMapping(value = "/increase/{id}")
@@ -44,8 +51,14 @@ public class OrderDetailsController {
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<?> deleteOrderDetails(@PathVariable Long id) {
-        OrderDetails orderDetails = orderDetailService.deleteOrderDetails(id);
-        return ResponseEntity.ok("Đã xóa sản phẩm từ giỏ hàng!");
+        try {
+            OrderDetails orderDetails = orderDetailService.deleteOrderDetails(id);
+            return ResponseEntity.ok(orderDetails);
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.ok(e.getMessage());
+        }
+
     }
 
     @DeleteMapping(value = "/clean-cart/{cartId}")

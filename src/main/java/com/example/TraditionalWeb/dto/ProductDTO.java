@@ -21,7 +21,7 @@ public class ProductDTO {
     public Long quantity;
     public String isDeleted;
     public String specifications;
-//    public ProductType productType;
-//    public Brand brands;
+    public ProductType productTypes;
+    public Brand brands;
     public Set<Images> images;
 }

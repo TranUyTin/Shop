@@ -1,7 +1,6 @@
 package com.example.TraditionalWeb.repository;
 
 import com.example.TraditionalWeb.models.Product;
-import com.example.TraditionalWeb.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,7 +24,14 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     @Override
     Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 
-    Product findByName(String name);
+    @Query(value = "SELECT * FROM product u WHERE u.id_product=?1", nativeQuery = true)
+    Product findByProductId(Long id);
+
+    @Query(value = "SELECT * FROM product u WHERE u.name like %?1% and u.is_deleted = ?2", nativeQuery = true)
+    Page<Product> findByName( String name, String isDeleted, Specification<Product> spec, Pageable pageable);
+
+    @Query(value = "SELECT * FROM product u WHERE u.brand = ?1 and u.is_deleted = ?2", nativeQuery = true)
+    Page<Product> findByBrand(String brand, String isDeleted, Specification<Product> spec, Pageable pageable);
 
     Boolean existsByName(String name);
 

@@ -1,10 +1,12 @@
 package com.example.TraditionalWeb.service.serviceimpl;
 
 import com.example.TraditionalWeb.exception.UserException;
+import com.example.TraditionalWeb.models.Cart;
 import com.example.TraditionalWeb.models.User;
 import com.example.TraditionalWeb.models.UserDetailsImpl;
 import com.example.TraditionalWeb.models.request.SignUpRequest;
 import com.example.TraditionalWeb.models.response.JwtResponse;
+import com.example.TraditionalWeb.repository.CartRepository;
 import com.example.TraditionalWeb.repository.UserRepository;
 import com.example.TraditionalWeb.service.AuthenticationService;
 import com.example.TraditionalWeb.utils.security.JwtUtils;
@@ -28,6 +30,9 @@ public class AuthenticationImpl implements AuthenticationService {
     private UserRepository userRepository;
 
     @Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
     private JwtUtils jwtUtils;
 
     @Autowired
@@ -48,6 +53,7 @@ public class AuthenticationImpl implements AuthenticationService {
             throw new UsernameNotFoundException("You don't have account! Do you want sign up?");
         }
         JwtResponse jwtResponse = new JwtResponse();
+        jwtResponse.setId(user.getId());
         jwtResponse.setToken(jwt);
         jwtResponse.setUsername(user.getUsername());
         jwtResponse.setFullName(user.getFullName());
@@ -78,6 +84,13 @@ public class AuthenticationImpl implements AuthenticationService {
         user.setIsAdmin(false);
         user.setAddress(signUpRequest.getAddress());
         userRepository.save(user);
+        Cart cart = new Cart();
+        cart.setUser(user);
+        cart.setOrderDetails(null);
+        while (cartRepository.findByCartId(cart.getId()) != null) {
+            cart.setId(cart.getId()+1);
+        }
+        cartRepository.save(cart);
         return user;
     }
 }

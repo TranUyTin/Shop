@@ -1,5 +1,6 @@
 package com.example.TraditionalWeb.controller;
 
+import com.example.TraditionalWeb.dto.BillDTO;
 import com.example.TraditionalWeb.models.Bill;
 import com.example.TraditionalWeb.models.request.BillRequest;
 import com.example.TraditionalWeb.service.BillService;
@@ -17,21 +18,21 @@ public class BillController {
     @Autowired
     private BillService billService;
 
-    @GetMapping(value = "/{userId}")
+    @GetMapping(value = "/getList/{userId}")
     public ResponseEntity<?> getListByUser(@PathVariable Long userId) {
         Set<Bill> billSet = billService.getBillByUser(userId);
         return ResponseEntity.ok(billSet);
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<?> createBill(@RequestBody BillRequest billRequest) {
+    public ResponseEntity<?> createBill(@RequestBody BillRequest billRequest){
         Bill bill = billService.createBill(billRequest);
         return ResponseEntity.ok(bill);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getBillById(@PathVariable Long id) {
-        Bill bill = billService.getBillDetail(id);
+        BillDTO bill = billService.getBillDetail(id);
         return ResponseEntity.ok(bill);
     }
 }

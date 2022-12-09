@@ -28,6 +28,18 @@ public class ProductController {
         return ResponseEntity.ok(productList);
     }
 
+    @GetMapping(value = "/search")
+    public ResponseEntity<?> searchListProduct(PagingRequest pagingRequest, @RequestParam(name = "name") String name){
+        PaginationResponse<ProductDTO> productList = productService.searchListProduct(pagingRequest, name);
+        return ResponseEntity.ok(productList);
+    }
+
+    @GetMapping(value = "/search-brand")
+    public ResponseEntity<?> searchListProductByBrand(PagingRequest pagingRequest, @RequestParam(name = "name") String name){
+        PaginationResponse<ProductDTO> productList = productService.searchListProductByBrand(pagingRequest, name);
+        return ResponseEntity.ok(productList);
+    }
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getProductDetail(@PathVariable Long id){
         try {

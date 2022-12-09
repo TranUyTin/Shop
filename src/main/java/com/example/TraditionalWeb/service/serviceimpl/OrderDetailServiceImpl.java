@@ -1,5 +1,7 @@
 package com.example.TraditionalWeb.service.serviceimpl;
 
+import com.example.TraditionalWeb.dto.OrderDetailDTO;
+import com.example.TraditionalWeb.dto.ProductDTO;
 import com.example.TraditionalWeb.models.Cart;
 import com.example.TraditionalWeb.models.OrderDetails;
 import com.example.TraditionalWeb.models.Product;
@@ -9,6 +11,7 @@ import com.example.TraditionalWeb.repository.OrderDetailRepository;
 import com.example.TraditionalWeb.repository.ProductRepository;
 import com.example.TraditionalWeb.service.OrderDetailService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,16 +30,29 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     OrderDetailRepository orderDetailRepository;
 
     @Override
-    public Set<OrderDetails> getOrderDetailsList(Long cartId) {
-        Set<OrderDetails> orderDetailsSet = orderDetailRepository.getOrderDetailByCart(cartId);
-        return orderDetailsSet;
+    public Set<OrderDetailDTO> getOrderDetailsList(Long cartId) {
+        Set<OrderDetails> orderDetailsSet = orderDetailRepository.findByCartId(cartId);
+        Set<OrderDetailDTO> orderDetailDTOSet = new HashSet<>();
+        for(OrderDetails orderDetails: orderDetailsSet) {
+            if (!orderDetails.isDeleted()) {
+                ProductDTO productDTO = new ProductDTO();
+                BeanUtils.copyProperties(orderDetails.getProduct(), productDTO);
+                OrderDetailDTO orderDetailDTO = new OrderDetailDTO();
+                orderDetailDTO.setProduct(productDTO);
+                BeanUtils.copyProperties(orderDetails, orderDetailDTO);
+                orderDetailDTOSet.add(orderDetailDTO);
+            }
+
+        }
+
+        return orderDetailDTOSet;
     }
 
     @Override
     public OrderDetails addProductToOrderDetail(OrderDetailRequest orderDetailRequest) {
         Cart cart = cartRepository.findById(orderDetailRequest.getCartId()).get();
-        Product product = productRepository.findById(orderDetailRequest.getProductId()).get();
-        OrderDetails orderDetailsInDB = orderDetailRepository.findByProduct(orderDetailRequest.getProductId());
+        Product product = productRepository.findByProductId(orderDetailRequest.getProductId());
+        OrderDetails orderDetailsInDB = orderDetailRepository.findByProduct(orderDetailRequest.getProductId(), orderDetailRequest.getCartId());
         if (orderDetailsInDB == null) {
             OrderDetails orderDetails = new OrderDetails();
             orderDetails.setCart(cart);
@@ -86,15 +102,15 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         OrderDetails orderDetails = orderDetailRepository.findByIdAndIsDeleted(id, false);
         orderDetails.setDeleted(true);
         orderDetailRepository.save(orderDetails);
-        orderDetailRepository.delete(orderDetails);
         return orderDetails;
     }
 
     @Override
     public String cleanOrderDetailsInCart(Long cartId) {
-        Set<OrderDetails> orderDetailsSet = orderDetailRepository.getOrderDetailByCart(cartId);
+        Set<OrderDetails> orderDetailsSet = orderDetailRepository.findByCartId(cartId);
         for (OrderDetails orderDetails : orderDetailsSet) {
-            orderDetailRepository.delete(orderDetails);
+            orderDetails.setDeleted(true);
+            orderDetailRepository.save(orderDetails);
         }
         return "Giỏ hàng trống";
     }
