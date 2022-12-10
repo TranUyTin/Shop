@@ -1,5 +1,5 @@
-<div class="footer" >
-  <div class="click-to-top" *ngIf="isShowBtn"  (click)="scrollToTop()">
+<div class="footer" *ngIf="!navigateService.isAdminPage()">
+  <div class="click-to-top" *ngIf="isShowBtn" (click)="scrollToTop()">
     <mat-icon>keyboard_arrow_up</mat-icon>
   </div>
   <div class="footer_container">
@@ -51,19 +51,15 @@
       </div>
     </div>
     <div class="footer_list">
-      <h5 class="footer_header">Hướng dẫn mua hàng</h5>
+      <h5 class="footer_header">Tra cứu và chính sách bảo hành</h5>
       <div class="detail">
         <p class="detail_item">
-          <mat-icon>payment</mat-icon>
-          <a href=""> Hình thức thanh toán </a>
+          <mat-icon>turned_in</mat-icon>
+          <a routerLink="/policy_insurance"> Chính sách bảo hành </a>
         </p>
         <p class="detail_item">
-          <mat-icon>build</mat-icon>
-          <a href=""> Chính sách bảo hành </a>
-        </p>
-        <p class="detail_item">
-          <mat-icon>lock</mat-icon>
-          <a href=""> Chính sách bảo mật </a>
+          <mat-icon>search</mat-icon>
+          <a routerLink="/insurance"> Tra cứu bảo hành </a>
         </p>
       </div>
     </div>

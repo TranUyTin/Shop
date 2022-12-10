@@ -1,8 +1,10 @@
+@import "~ngx-toastr/toastr";
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 /* You can add global styles to this file, and also import other style files */
 
 html,
 body {
-  height: 100%;
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
@@ -12,6 +14,9 @@ body {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+.rw-conversation-container .rw-header {
+  background-color: #cd1818;
 }
 .pt10 {
   padding-top: 10px;
@@ -26,6 +31,16 @@ body {
   margin-bottom: 10px;
 }
 
+.mt20 {
+  margin-top: 20;
+}
+.mb20 {
+  margin-bottom: 20px;
+}
+.dummy {
+  width: 25vw;
+  height: 100vh;
+}
 span.sr-only {
   display: none !important ;
 }
@@ -43,4 +58,22 @@ ul {
 ol,
 ul {
   padding-left: 0;
+}
+/* .ngx-toastr {
+  width: 450px;
+} */
+/* 
+html {
+  scroll-behavior: smooth;
+} */
+
+.toast-top-right {
+  top: 106px !important;
+  right: 12px;
+}
+.toast-container{
+  position: fixed !important;
+}
+.toast-container .ngx-toastr {
+  margin-bottom: 10px;
 }

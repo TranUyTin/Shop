@@ -15,8 +15,66 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+    <link rel="stylesheet" type="text/css" href="assets\bootstrap.css" />
   </head>
   <body>
     <app-root></app-root>
+    <style>
+      .rw-conversation-container .rw-header {
+        background-color: #cd1818;
+      }
+      .rw-conversation-container .rw-title {
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .rw-messages-container .rw-message .rw-response{
+        background-color: #f62929;
+        color: #fff;
+      }
+
+      .rw-conversation-container .rw-reply{
+        background-color: #fff;
+        color: #f62929;
+        border-radius: 5px;
+        border-color: none;
+        border-color: #f62929;
+      }
+
+      .rw-launcher{
+        background-color: #cd1818;
+      }
+
+      .rw-carousel-container ,.rw-carousel-container .rw-carousel-card{
+        min-height: unset;
+      }
+      .rw-carousel-container .rw-carousel-card .rw-carousel-card-subtitle{
+        opacity: unset;
+        color: #e81000;
+      }
+    </style>
+    <script type="application/javascript">
+      !(function () {
+        let e = document.createElement("script"),
+          t = document.head || document.getElementsByTagName("head")[0];
+        (e.src =
+          "https://cdn.jsdelivr.net/npm/rasa-webchat@1.0.1/lib/index.js"),
+          (e.async = !0),
+          (e.onload = () => {
+            window.WebChat.default(
+              {
+                customData: { language: "vi" },
+                title: "Tư vấn viên",
+                showMessageDate: true,
+                inputTextFieldHint: "",
+                subtitle: "Rất hân hạnh được hỗ trợ quý khách",
+                socketUrl: "http://localhost:5005",
+              },
+              null
+            );
+          }),
+          t.insertBefore(e, t.firstChild);
+      })();
+      localStorage.removeItem('chat_session');
+    </script>
   </body>
 </html>

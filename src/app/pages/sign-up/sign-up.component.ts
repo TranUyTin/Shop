@@ -1,3 +1,6 @@
+import { User } from './../../constant/model';
+import { ToastService } from './../../service/toast.service';
+import { AuthenticationService } from './../../service/authentication.service';
 import { FormService } from './../../service/form.service';
 import { LogInComponent } from './../log-in/log-in.component';
 import { Component, Inject, OnInit } from '@angular/core';
@@ -15,9 +18,11 @@ import {
 export class SignUpComponent implements OnInit {
   constructor(
     public fb: FormBuilder,
+    public formService: FormService,
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<SignUpComponent>,
-    public formSerive: FormService,
+    public AuthenticationService: AuthenticationService,
+    public toastService: ToastService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
@@ -25,7 +30,7 @@ export class SignUpComponent implements OnInit {
     fullName: [
       '',
       Validators.compose([Validators.required, Validators.maxLength(30)]),
-    ],
+    ], 
     userEmail: [
       '',
       Validators.compose([Validators.required, Validators.email]),
@@ -42,14 +47,14 @@ export class SignUpComponent implements OnInit {
       '',
       Validators.compose([
         Validators.required,
-        Validators.pattern(this.formSerive.REGEX_PASSOWRD),
+        Validators.pattern(this.formService.REGEX_PASSOWRD),
       ]),
     ],
     phoneNumber: [
       '',
       Validators.compose([
         Validators.required,
-        Validators.pattern(this.formSerive.REGEX_PHONE),
+        Validators.pattern(this.formService.REGEX_PHONE),
       ]),
     ],
     address: [
@@ -77,7 +82,30 @@ export class SignUpComponent implements OnInit {
     console.log;
   }
   onSubmit() {
-    console.log('Infor', this.signUpForm);
+    let data: User = {
+      username: this.signUpForm.controls['userName'].value,
+      password: this.signUpForm.controls['passWord'].value,
+      phone: this.signUpForm.controls['phoneNumber'].value,
+      email: this.signUpForm.controls['userEmail'].value,
+      fullName: this.signUpForm.controls['fullName'].value,
+      address: this.signUpForm.controls['address'].value,
+    };
+    this.AuthenticationService.signUp(data).subscribe(
+      () => {
+        this.signUpForm.reset();
+        this.toastService.showSuccess(
+          'Đăng ký thành công, bạn sẽ được chuyển sang trang đăng nhập.'
+        );
+        this.switchLogin();
+      },
+      (err) => {
+        let msg = err.error.text;
+        this.signUpForm.reset();
+        msg
+          ? this.toastService.showError(msg)
+          : this.toastService.showError('Đăng ký thất bại, vui lòng thử lại');
+      }
+    );
   }
   closeDialog() {
     this.dialogRef.close();

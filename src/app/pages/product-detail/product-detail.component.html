@@ -1,9 +1,10 @@
-<div class="product_detail" *ngFor="let item of productDetail">
+<div class="product_detail" *ngFor="let item of productDetails">
   <div class="product_detail-header">
     <h4 class="detail_header-name">
       {{ item.name }}
     </h4>
-    <div class="detail_header-stock">Còn hàng</div>
+    <div *ngIf="item.quantity == 0"  class="detail_header-out-of-stock" >Hết hàng</div>
+    <div *ngIf="item.quantity !== 0"  class="detail_header-stock" >Còn hàng</div>
   </div>
   <div class="detail_content">
     <div class="detail_slider">
@@ -11,7 +12,7 @@
         <div class="swiper-container gallery-slider">
           <div class="swiper-wrapper">
             <div class="swiper-slide" *ngFor="let image of images">
-              <img src="{{ image }}" alt="" />
+              <img src="{{ image.imageUrl }}" alt="" />
             </div>
           </div>
         </div>
@@ -19,7 +20,7 @@
         <div class="swiper-container gallery-thumbs">
           <div class="swiper-wrapper">
             <div class="swiper-slide" *ngFor="let image of images">
-              <img src="{{ image }}" alt="" />
+              <img src="{{ image.imageUrl }}" alt="" />
             </div>
           </div>
         </div>
@@ -29,7 +30,7 @@
       <div class="detail_content-price">
         <span class="prices-header"> Mua ngay </span>
         <h5 class="prices">
-          {{ item.cost }}
+          {{ item.cost |number:'1.0'}} VNĐ
         </h5>
       </div>
       <div class="detail_content-promo">
@@ -53,6 +54,27 @@
           </span>
         </div>
       </div>
+      
+      <div class="detail_content-button">
+        <button class="buy-now btn btn-danger" (click) ="addCart(item.id, false)">MUA NGAY</button>
+        <button class="add-cart btn btn-outline-danger" (click)="addCart(item.id, true)">
+          THÊM VÀO GIỎ HÀNG
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="product_detail-info">
+    <div class="product_detail-container">
+      <div class="product_detail-table">
+        <h4 class="header_detail-table">THÔNG SỐ KỸ THUẬT</h4>
+        <ng-container *ngFor="let item of this.detailInfo">
+          <div class="table_item-detail">
+            <span class="item_value">{{ item }}</span>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="product_detail-decs">
       <div class="detail_content-promo">
         <h5 class="promo_header">Chính sách bán hàng</h5>
         <div class="promo_detail-content">
@@ -87,31 +109,84 @@
           >
         </div>
       </div>
-      <div class="detail_content-button">
-        <button class="buy-now btn btn-danger">MUA NGAY</button>
-        <button class="add-cart btn btn-outline-danger">
-          THÊM VÀO GIỎ HÀNG
-        </button>
-      </div>
     </div>
   </div>
-  <div class="product_detail-info">
-    <div class="product_detail-container">
-      <div class="product_detail-table">
-        <h4 class="header_detail-table">THÔNG SỐ KỸ THUẬT</h4>
-        <ng-container *ngFor="let item of this.detailInfo">
-          <div class="table_item-detail">
-            <span class="item_value">{{ item }}</span>
+  <div class="product_relevant">
+    <h4 class="product_relevant-header">Một số sản phẩm khác</h4>
+    <div class="product_list row">
+      <div class="product_item col-md-3" *ngFor="let product of products.products; let i=index">
+        <div class="card" style="width: 18rem" *ngIf="i<4">
+          <img
+            src="{{ product.images[0]['imageUrl'] || product.images[1]['imageUrl']}}"
+            class="card-img-top"
+            alt="..."
+            [routerLink]="['/product_detail', product.id]"
+          />
+          <div class="card-body">
+            <h5 class="card-title">
+              {{ product.name }}
+            </h5>
+            <p class="card-text">
+              <span class="item-price">{{ product.cost | number:'1.0'}} VNĐ</span>
+            </p>
           </div>
-        </ng-container>
-      </div>
-    </div>
-    <div class="product_detail-decs">
-      <h4 class="header_detail-decs">ĐẶC ĐIỂM SẢN PHẨM</h4>
-      <div class="detail_content">
-        <span>
-          {{ productDetail[0].details }}
-        </span>
+          <ul class="list-group list-group-flush" *ngIf="products.productType.name == 'laptop'">
+            <li class="list-group-item">
+              <img
+                width="22px"
+                height="22px"
+                src="../../../assets/image/product_item/cpu.png"
+              />
+              <span>
+                {{
+                  product.specifications
+                    .split(",")[0]
+                    .concat(product.specifications.split(",")[1])
+                    .split("(")[0]
+                    .split("CPU")[1]
+                }}
+              </span>
+            </li>
+            <li class="list-group-item">
+              <img
+                width="22px"
+                height="22px"
+                src="../../../assets/image/product_item/ram.png"
+              />
+              <span>
+                {{
+                  product.specifications
+                    .split(",")[2]
+                    .split(" ", 5)
+                    .join(",")
+                    .replaceAll(",", " ")
+                }}</span
+              >
+            </li>
+            <li class="list-group-item">
+              <img
+                width="22px"
+                height="22px"
+                src="../../../assets/image/product_item/gpu.png"
+              />
+              <span> {{ product.specifications.split(",")[4] }}</span>
+            </li>
+          </ul>
+          <div class="card-body">
+            <a class="card-link">
+              <button
+                type="button"
+                class="btn btn-outline-danger"
+                [routerLink]="['/product_detail', product.id]"
+              >
+                Xem chi tiết
+              </button></a
+            >
+            <a class="card-link">
+              <button type="button" class="btn btn-danger" (click)="addCart(product.id, true)">Thêm vào giỏ</button>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>

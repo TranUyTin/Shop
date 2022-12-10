@@ -1,0 +1,123 @@
+.container {
+  position: relative;
+  background-color: #fff;
+  border-radius: 8px;
+  width: 400px;
+  padding: 0;
+}
+.icon-close {
+  position: absolute;
+  top: -10px;
+  right: -80px;
+  cursor: pointer;
+}
+.icon-close mat-icon {
+  font-size: 30px !important;
+  color: #cd1818;
+}
+
+.form_heading {
+  margin-bottom: 20px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 34px;
+  margin: 0 auto 10px;
+  text-align: center;
+  text-transform: uppercase;
+  background: -o-linear-gradient(354.82deg, #eb67cb 43.94%, #6285f0 91.72%);
+  background: linear-gradient(95.18deg, #eb67cb 43.94%, #6285f0 91.72%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+}
+
+.form_control {
+  position: relative;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.form_input {
+  width: 100%;
+  border: none;
+  outline: none;
+  border-bottom: 3px solid #adadad;
+  font-size: 16px;
+  padding: 6px 0;
+}
+
+.animation {
+  position: absolute;
+  width: 0px;
+  border: none;
+  outline: none;
+  bottom: 0;
+  left: 0;
+  border-bottom: 3px solid #cd1818;
+  transition: 1s ease-in;
+}
+
+.form_input:focus ~ .animation {
+  position: absolute;
+  width: 100%;
+  border: none;
+  outline: none;
+  border-bottom: 3px solid #cd1818;
+  transition: 0.5s ease-in;
+}
+
+.form_btn {
+  margin-top: 55px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 25px;
+  background-color: #ccc;
+  font-size: 20px;
+  border: none;
+  outline: none;
+  font-weight: 600;
+  transition: 0.5s;
+  color: #fff;
+}
+.active_form_btn {
+  color: #fff;
+  background-color: #cd1818;
+  cursor: pointer;
+}
+
+.active_form_btn:hover {
+  background: #da5353;
+}
+
+.form_control.error .form_input {
+  border-bottom: 3px solid #e74c3c;
+}
+.mess {
+  position: absolute;
+  color: #e74c3c;
+  top: 100%;
+  left: 0;
+  margin: 8px 0;
+  font-size: 14px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.cancel-icon {
+  height: 14px !important;
+  width: 16px !important;
+  font-size: 16px;
+  margin-right: 4px;
+  margin-top: 2px;
+}
+.form-select,
+.form-control {
+  margin-top: 40px;
+}
+option {
+}

@@ -3,17 +3,22 @@ header {
   background: #fff;
   position: fixed;
   left: 0;
-  right: 0;
   top: 0;
   z-index: 999;
+  width: 100vw;
 }
+.header {
+  padding-top: 176px;
+}
+
 .header_container {
 }
 .header_top {
   background: #cd1818;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+  padding: 0 7.7%;
 }
 
 .header_top_search {
@@ -22,17 +27,17 @@ header {
 input {
   outline: none;
   height: 40px;
-  width: 450px;
-  padding: 20px;
+  width: 350px;
+  padding: 20px 35px 20px 20px;
   border-radius: 30px;
   border: transparent;
-  background-color: silver;
+  background-color: #dfe8f8;
 }
 .icon-search {
   position: absolute;
   top: 50%;
   right: 0px;
-  color: #d43c3c;
+  color: #cd1818;
   cursor: pointer;
   font-size: 26px !important;
   width: unset !important;
@@ -51,8 +56,8 @@ img {
   justify-content: space-evenly;
   align-items: center;
   height: 76px;
-  background-color: #252525;
-  color: #fff;
+  background-color: #dfe8f8;
+  color: #000;
   padding: 0 8px;
 }
 .product_list {
@@ -67,17 +72,44 @@ img {
 }
 .product_item {
   position: absolute;
-  background-color: #252525;
+  background-color: #dfe8f8;
   top: 36px;
   left: -20px;
+  min-width: 400px;
 }
+
 .product_list:hover > .product_item .submenu {
-  display: block;
   text-shadow: unset;
-  color: #fff;
-  padding: 10px 20px;
-  transition: 5s ease;
+  padding: 10px 10px;
+  text-shadow: none;
+  min-width: 180px;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
 }
+
+.product_list:nth-child(3) > .product_item .submenu {
+  min-width: 200px;
+}
+
+.product_list:nth-child(1) .product_item,
+.product_list:nth-child(2) .product_item,
+.product_list:nth-child(4) .product_item{
+  min-width: 360px;
+}
+
+.product_list:last-child .product_item {
+  min-width: unset; 
+}
+.product_list:last-child:hover .product_item .submenu{
+  padding: 10px 15px;
+  text-shadow: none;
+  min-width: 220px;
+  display: inline-flex;
+  justify-content: flex-start;
+}
+
 .product_item::after {
   content: "";
   position: absolute;
@@ -92,7 +124,6 @@ img {
   list-style-type: none;
   display: none;
   min-width: 160px;
-  color: #fff;
   padding: 4px 10px 4px 0;
 }
 .product_item .submenu:last-child {
@@ -104,7 +135,7 @@ img {
 }
 .submenu a {
   text-decoration: none;
-  color: #fff;
+  color: #000;
 }
 
 .submenu a:hover {
@@ -116,7 +147,6 @@ img {
 .header_top-action {
   position: relative;
   display: flex;
-  cursor: pointer;
   color: #fff;
   width: auto;
   height: 100px;
@@ -134,6 +164,7 @@ img {
   justify-content: center;
   align-items: center;
   margin: 0 8px;
+  cursor: pointer;
 }
 .personal-user:hover {
   border-radius: 5px;
@@ -148,6 +179,7 @@ img {
 
 .cart-user {
   margin: 0 8px;
+  cursor: pointer;
 }
 .number-cart-user {
   position: absolute;
@@ -171,11 +203,71 @@ img {
   color: #fff;
 }
 .logIn {
-  margin-right: 10px;
+  margin: 0 16px;
   padding: 10px;
   border: 1px solid #fff;
   border-radius: 5px;
   color: #000;
   background-color: #fff;
   transition: all 0.6s ease-in-out;
+  cursor: pointer;
+}
+
+/* Admin */
+nav {
+  transition: all 0.5s ease;
+  background: #cd1818;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  width: 20vw;
+  height: 100vh;
+  overflow: hidden;
+}
+.header-admin {
+}
+.header_container-admin {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.header_top-admin {
+  padding: 20px 0;
+}
+.logo-admin img {
+  height: 150px;
+}
+.icon-admin {
+  margin-right: 10px;
+}
+.header_admin-link {
+  width: 83%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.header_admin-item {
+  margin-top: 20px;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-radius: 10px;
+}
+.header_admin-item:hover {
+  background-color: rgb(0 0 0 / 15%);
+}
+.active_admin-item {
+  background-color: rgb(0 0 0 / 15%);
+}
+
+hr {
+  border-top: 2px solid #000;
+}
+
+.mat-menu-item:hover:not([disabled]), .mat-menu-item.cdk-program-focused:not([disabled]), .mat-menu-item.cdk-keyboard-focused:not([disabled]), .mat-menu-item-highlighted:not([disabled]){
+  background-color: #cd1818;
 }

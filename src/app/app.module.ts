@@ -1,5 +1,5 @@
-import { MatDialogModule } from '@angular/material/dialog';
-import { NgModule } from '@angular/core';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,6 +20,21 @@ import { CartComponent } from './pages/cart/cart.component';
 import { ProductDetailComponent } from './pages/product-detail/product-detail.component';
 import { SwiperModule } from 'swiper/angular';
 import { MatBadgeModule } from '@angular/material/badge';
+import { ManageComponent } from './pages/manage/manage.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { ManageRevenueComponent } from './pages/manage-revenue/manage-revenue.component';
+import { ManageProductComponent } from './pages/manage-product/manage-product.component';
+import { PaginationComponent } from './pages/pagination/pagination.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { AddProductComponent } from './pages/add-product/add-product.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr';
+import { JwtInterceptorInterceptor } from './interceptor/jwt-interceptor.interceptor';
+import { InsuranceComponent } from './pages/insurance/insurance.component';
+import { SortPipe } from './sort.pipe';
+import { PolicyInsuranceComponent } from './pages/policy-insurance/policy-insurance.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +48,14 @@ import { MatBadgeModule } from '@angular/material/badge';
     LogInComponent,
     CartComponent,
     ProductDetailComponent,
+    ManageComponent,
+    ManageRevenueComponent,
+    ManageProductComponent,
+    PaginationComponent,
+    AddProductComponent,
+    InsuranceComponent,
+    SortPipe,
+    PolicyInsuranceComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,8 +70,30 @@ import { MatBadgeModule } from '@angular/material/badge';
     FormsModule,
     SwiperModule,
     MatBadgeModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatTooltipModule,
+    NgApexchartsModule,
+    HttpClientModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      positionClass: 'toast-top-right',
+      progressBar: true,
+      closeButton: true,
+    }),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptorInterceptor,
+      multi: true,
+    },
+    {
+      provide: MatDialogRef,
+      useValue: {},
+    },
+  ],
   bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}

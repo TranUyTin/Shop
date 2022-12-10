@@ -1,0 +1,42 @@
+<div class="container">
+    <div class="list_insurance">
+        <div class="search-insurance">
+            <h4 class="header">Tra cứu bảo hành</h4>
+            <div class="top_search">
+                <input type="search" placeholder="Nhập mã số hóa đơn" #inputValue  (keyup.enter)="searchInsurance(inputValue)"/>
+                <mat-icon class="icon-search" (click)="searchInsurance(inputValue)"  >search</mat-icon>
+            </div>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Tên sản phẩm</th>
+                    <th scope="col">Giá</th>
+                    <th scope="col">Số lượng</th>
+                    <th scope="col">Ngày hết hạn bảo hành</th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="listProduct.length != 0">
+                    <tr *ngFor= "let product of listProduct.orderDetails; let i =index">
+                      <th scope="row">{{i +1}}</th>
+                      <td>{{product.product.name}}</td>
+                      <td>{{product.product.cost | number:'1.0'}} VNĐ</td>
+                      <td>{{product.amount}}</td>
+                      <td>{{listProduct.createdAt | date : 'medium' }}</td>
+                    </tr>
+                </tbody>
+              </table>
+              <div class="total_fee" *ngIf="listProduct.length != 0">Tổng tiền : {{listProduct.total | number:'1.0'}} VNĐ</div>
+              <div class="cart_empty" *ngIf="listProduct.length == 0">
+                <div class="empty_img" >
+                  <img
+                    src="https://i.imgur.com/Drj57qu.png
+                  "
+                    alt=""
+                  />
+                  <div class="cart_empty_content">Không tìm thấy kết quả, vui lòng thử lại</div>
+                </div>
+              </div>
+        </div>
+      </div>
+</div>

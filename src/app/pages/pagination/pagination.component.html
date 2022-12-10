@@ -1,0 +1,11 @@
+<div class="pagination">
+  <ngb-pagination
+    (pageChange)="loadPage($event)"
+    [collectionSize]="collectionSize"
+    [page]="page"
+    [pageSize]="pageSize"
+    [boundaryLinks]="true"
+    [maxSize]="4"
+    [rotate]="true"
+  ></ngb-pagination>
+</div>

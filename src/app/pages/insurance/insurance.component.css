@@ -1,0 +1,74 @@
+.container {
+  padding: 20px 0;
+}
+
+.header {
+  color: #cd1818;
+
+}
+h5{
+  margin: 5px 0;
+}
+
+li {
+  margin-bottom: 1rem;
+}
+
+.search-insurance{
+	margin-bottom: 20px;
+}
+.top_search {
+  position: relative;
+	display: flex;
+	justify-content: flex-end;
+	margin-bottom: 20px;
+}
+
+input {
+	outline: none;
+	height: 40px;
+	width: 250px;
+	padding: 20px 40px 20px 20px;
+	border-radius: 30px;
+	border: transparent;
+	background: #dfe8f8;
+	float: right;
+}
+.icon-search {
+	position: absolute;
+	top: 50%;
+	right: 0px;
+	color: #222222;
+	cursor: pointer;
+	font-size: 26px !important;
+	width: unset !important;
+	height: unset !important;
+	font-weight: 700;
+	transform: translate(-50%, -50%);
+}
+
+.empty_img{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.cart_empty {
+	display: flex;
+	flex-direction: column;
+	margin: 40px auto;
+	align-items: center;
+}
+.cart_empty_content {
+	margin: 20px 0;
+}
+
+.total_fee {
+	text-align: right;
+	font-size: 20px;
+	color: #cd1818;
+	padding: 0.5rem 0.5rem;
+	border-bottom: 1px solid #dee2e6;
+	font-weight: bold;
+}

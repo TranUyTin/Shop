@@ -1,59 +1,143 @@
-<div [ngStyle]="{ 'padding-bottom.px': offsetHeight }">
+<!-- Client -->
+<div class="header" *ngIf="!navigateService.isAdminPage()">
   <header>
     <div class="header_container">
       <div class="header_top">
-        <a href="#" class="header_top-logo" routerLink="">
+        <a class="header_top-logo" routerLink="">
           <img src="../../assets/image/logo/logo.png" alt="" />
         </a>
-        <div class="header_top_search">
-          <input type="text" placeholder="Bạn cần tìm sản phẩm nào?" />
-          <mat-icon class="icon-search">search</mat-icon>
-        </div>
         <div class="header_top-action">
-          <div *ngIf="!isLogin" class="logIn" (click)="openDialog()">
+          <div
+            *ngIf="!AuthenticationService.isLogin"
+            class="logIn"
+            (click)="openDialog()"
+          >
             Đăng nhập
           </div>
           <div
-            *ngIf="isLogin"
+            *ngIf="AuthenticationService.isLogin"
             class="personal-user"
             mat-icon-button
             [matMenuTriggerFor]="menu"
           >
-            <div class="name-user">Tin</div>
+            <div class="name-user">{{userName}}</div>
             <mat-icon class="icon-header">person</mat-icon>
             <mat-menu #menu="matMenu" class="matMenu">
-              <button mat-menu-item>
-                <mat-icon>face</mat-icon>
-                <span>Thông tin cá nhân</span>
+              <button
+                mat-menu-item
+                *ngIf="
+                  AuthenticationService.isAdmin && AuthenticationService.isLogin
+                "
+                (click)="navigateService.navigatePath('manage')"
+              >
+                <mat-icon>widgets</mat-icon>
+                <span>Trang quản lý</span>
               </button>
-              <button mat-menu-item>
+              <button mat-menu-item (click)="logOut()">
                 <mat-icon>input</mat-icon>
                 <span>Đăng xuất</span>
               </button>
             </mat-menu>
           </div>
-          <div
-            class="cart-user"
-            (click)="this.navigateService.navigatePath('cart')"
-          >
+          <div class="cart-user" (click)="navigateService.navigatePath('cart')">
             <mat-icon class="icon-header">shopping_cart </mat-icon>
-            <span class="number-cart-user">9</span>
+            <span class="number-cart-user">{{cartQuantity? cartQuantity : 0}}</span>
           </div>
         </div>
       </div>
       <div class="header_nav">
-        <ul class="product_list" *ngFor="let productItem of listProductType">
+        <ul class="product_list">
           <li>
-            {{ productItem }}
+            Laptop
             <mat-icon>keyboard_arrow_down</mat-icon>
           </li>
           <ul class="product_item">
-            <li class="submenu" *ngFor="let item of listProductItem">
-              <a href=""> {{ item }} </a>
+            <li class="submenu" *ngFor="let item of listProductItemLaptop | sort: 'id': 'desc'">
+              <a [routerLink]="['/product_category', item.name]"> {{ item.fullName }} </a>
+            </li>
+          </ul>
+        </ul>
+        <ul class="product_list">
+          <li>
+            Màn hình
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </li>
+          <ul class="product_item">
+            <li class="submenu" *ngFor="let item of listProductItemMH | sort: 'id': 'desc'">
+              <a [routerLink]="['/product_category', item.name]"> {{ item.fullName }} </a>
+            </li>
+          </ul>
+        </ul>
+        <ul class="product_list">
+          <li>
+            Linh kiện máy tính
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </li>
+          <ul class="product_item">
+            <li class="submenu" *ngFor="let item of listProductItemLKMT | sort: 'id': 'desc'">
+              <a [routerLink]="['/product_category', item.name]"> {{ item.fullName }} </a>
+            </li>
+          </ul>
+        </ul>
+        <ul class="product_list">
+          <li>
+            Linh kiện laptop
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </li>
+          <ul class="product_item">
+            <li class="submenu" *ngFor="let item of listProductItemLKLT | sort: 'id': 'desc'">
+              <a [routerLink]="['/product_category', item.name]"> {{ item.fullName }} </a>
+            </li>
+          </ul>
+        </ul>
+        <ul class="product_list">
+          <li>
+           Gaming gear
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </li>
+          <ul class="product_item">
+            <li class="submenu" *ngFor="let item of listProductItemGG | sort: 'id': 'desc'">
+              <a [routerLink]="['/product_category', item.name]"> {{ item.fullName }} </a>
             </li>
           </ul>
         </ul>
       </div>
     </div>
   </header>
+</div>
+<div class="header-admin" *ngIf="navigateService.isAdminPage()">
+  <nav>
+    <div class="header_container-admin">
+      <div class="header_top-admin">
+        <a class="header_top-logo logo-admin" routerLink="">
+          <img src="../../assets/image/logo/logo.png" alt="" />
+        </a>
+      </div>
+      <div class="header_admin-link">
+        <hr />
+
+        <div
+          [routerLink]="['/manage']"
+          class="header_admin-item"
+          [routerLinkActive]="['active_admin-item']"
+        >
+          <mat-icon class="icon-admin">people</mat-icon>Quản lý người dùng
+        </div>
+        <div
+          [routerLink]="['/manage-product']"
+          class="header_admin-item"
+          [routerLinkActive]="['active_admin-item']"
+        >
+          <mat-icon class="icon-admin">gamepad</mat-icon>Quản lý sản phẩm
+        </div>
+        <div
+          [routerLink]="['/manage-revenue']"
+          class="header_admin-item"
+          [routerLinkActive]="['active_admin-item']"
+        >
+          <mat-icon class="icon-admin">equalizer</mat-icon>Quản lý doanh thu
+        </div>
+      </div>
+    </div>
+  </nav>
 </div>

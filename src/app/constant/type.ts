@@ -1,3 +1,10 @@
+import {
+  ChartComponent,
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexXAxis,
+  ApexTitleSubtitle,
+} from 'ng-apexcharts';
 export const NAVIGATE = {
   CART: '/cart',
   HOME: '',
@@ -5,10 +12,25 @@ export const NAVIGATE = {
 };
 
 export interface CART {
-  id_prodcut: string;
+  id: any;
   name: string;
-  cost: string;
+  cost?: any;
   specifications: string;
   images: string[];
-  details: string[];
+  isDeleted: boolean;
+  quantity: number;
 }
+
+export interface User {
+  fullname: string;
+  email: string;
+  phone: string;
+  address: string;
+}
+
+export type ChartOptions = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  xaxis: ApexXAxis;
+  title: ApexTitleSubtitle;
+};

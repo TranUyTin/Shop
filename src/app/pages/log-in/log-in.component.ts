@@ -1,8 +1,11 @@
+import { AuthenticationService } from './../../service/authentication.service';
+import { ToastService } from './../../service/toast.service';
 import { SignUpComponent } from './../sign-up/sign-up.component';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormService } from 'src/app/service/form.service';
+import { LUser } from 'src/app/constant/model';
 
 @Component({
   selector: 'app-log-in',
@@ -14,10 +17,12 @@ export class LogInComponent implements OnInit {
     public fb: FormBuilder,
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<LogInComponent>,
-    public formService: FormService
+    public formService: FormService,
+    public toastService: ToastService,
+    public AuthenticationService: AuthenticationService
   ) {}
 
-  logInForm = this.fb.group({
+  logInForm = this.fb.group({ 
     userName: [
       '',
       Validators.compose([
@@ -36,7 +41,25 @@ export class LogInComponent implements OnInit {
   });
   ngOnInit(): void {}
   onSubmit() {
-    console.log('Infor', this.logInForm);
+    let data: LUser = {
+      username: this.logInForm.controls['userName'].value,
+      password: this.logInForm.controls['passWord'].value,
+    };
+    this.AuthenticationService.login(data).subscribe(
+      (res: any) => {
+        this.logInForm.reset();
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('user', JSON.stringify(res));
+        this.AuthenticationService.isAdmin = res.isAdmin;
+        this.AuthenticationService.isLogin = true;
+        this.toastService.showSuccess('Đăng nhập thành công');
+        this.closeDialog();
+      },
+      (err) => {
+        this.logInForm.reset();
+        this.toastService.showError('Đăng nhập thất bại, vui lòng thử lại');
+      }
+    );
   }
 
   validateOverall(control: string) {
@@ -64,8 +87,5 @@ export class LogInComponent implements OnInit {
       width: '600px',
     });
     this.closeDialog();
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
-    });
   }
 }

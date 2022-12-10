@@ -1,0 +1,60 @@
+<div class="manage">
+  <div class="dummy"></div>
+  <div class="user_manage">
+    <div class="heading_table">
+      <h4>Quản lý sản phẩm</h4>
+      <div class="action-manage">
+        <div class="add_manage">
+          <button class="manage_btn-add" (click)="openAddProduct()" >
+            <mat-icon class="icon-add">add_circle_outline</mat-icon> Thêm sản
+            phẩm
+          </button>
+        </div>
+        <div class="manage_top_search">
+          <input type="search" placeholder="Tìm kiếm..." #inputValue  (keyup.enter)="searchProduct(inputValue)"/>
+          <mat-icon class="icon-search" (click)="searchProduct(inputValue)" >search</mat-icon>
+        </div>
+      </div>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Tên sản phẩm</th>
+          <th scope="col">Hình ảnh</th>
+          <th scope="col">Giá</th>
+          <th scope="col">Số lượng</th>
+          <th scope="col">Thông số kỹ thuật</th>
+          <th scope="col">Tác vụ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of productList; let i = index">
+          <th scope="row">{{(pageNumber -1 ) * pageSize + i }}</th>
+          <td>{{product.name}}</td>
+          <td><img style="width : 120px; height:120px" src="{{product.images[0].imageUrl}}" alt=""></td>
+          <td>{{product.cost | number:'1.0'}} VNĐ</td>
+          <td>{{product.quantity}}</td>
+          <td>{{product.specifications}}</td>
+          <td>
+            <div  class="action">
+              <div class="action-item">
+                <mat-icon matTooltip="Chỉnh sửa" [matTooltipPosition]="'above'"
+                  >edit</mat-icon
+                >
+              </div>
+              <div class="action-item">
+                <mat-icon matTooltip="Xóa" [matTooltipPosition]="'above'"
+                  >delete</mat-icon
+                >
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="manage-pagination">
+      <app-pagination [collectionSize] = "collectionSize" [page]="pageNumber" [pageSize]="pageSize" (pageChange) ="loadPage($event)"></app-pagination>
+    </div>
+  </div>
+</div>

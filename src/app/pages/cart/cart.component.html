@@ -1,6 +1,6 @@
 <div class="cart_content" *ngIf="productCart.length > 0">
   <div class="cart">
-    <h4 class="cart_header">Giỏ hàng (13)</h4>
+    <h4 class="cart_header">Giỏ hàng ({{quantityProduct}})</h4>
     <table class="table">
       <thead>
         <tr>
@@ -12,19 +12,19 @@
           <th scope="col">Xóa</th>
         </tr>
       </thead>
-      <tbody *ngFor="let cartItem of productCart">
-        <tr>
+      <tbody >
+        <tr *ngFor="let cartItem of productCart  | sort: 'id': 'desc'" >
           <td>
-            <img src="{{ cartItem.images[0] }}" alt="image" class="cart_img" />
+            <img src="{{cartItem.product.images[1].imageUrl}}" alt="image" class="cart_img" />
           </td>
-          <td class="cart_name">{{ cartItem.name }}</td>
-          <td class="cart_cost">{{ cartItem.cost }}</td>
+          <td class="cart_name">{{ cartItem.product.name }}</td>
+          <td class="cart_cost">{{ cartItem.product.cost | number:'1.0' }} VNĐ </td>
           <td class="cart_number">
             <div class="quantity_container">
               <button
                 class="quantity_btn"
-                (click)="decrement()"
-                [disabled]="checkDisableBtnDecrease()"
+                (click)="decrement(cartItem.id)"
+                [disabled] = "cartItem.amount < 2"
               >
                 -
               </button>
@@ -32,30 +32,29 @@
                 id="quantityElement"
                 type="number"
                 disabled
-                value="quantity"
-                [(ngModel)]="quantity"
+                [(ngModel)] = "cartItem.amount"
                 min="0"
-                max="100"
+                max="100" 
               />
               <button
                 class="quantity_btn"
-                (click)="increment()"
-                [disabled]="checkDisableBtnIncrease()"
+                (click)="increment(cartItem.id)"
+                [disabled] = "cartItem.amount > 99"
               >
                 +
               </button>
             </div>
           </td>
-          <td class="cart_total">{{ cartItem.cost }}</td>
+          <td class="cart_total">{{ cartItem.total | number:'1.0'}} VNĐ</td>
           <td class="cart_action">
-            <mat-icon>delete</mat-icon>
+            <mat-icon (click) = "deleteProduct(cartItem.id)">delete</mat-icon>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
   <div class="cart_footer">
-    <div class="total_fee">Thành tiền: 211.999.000 VNĐ</div>
+    <div class="total_fee">Thành tiền: {{totalPrice | number:'1.0'}} VNĐ</div>
     <div class="footer_btn_container">
       <button
         class="btn-backShop btn btn-outline-danger"
@@ -63,7 +62,7 @@
       >
         Tiếp tục mua sắm
       </button>
-      <button class="btn-checkout btn btn-danger">Thanh toán</button>
+      <button class="btn-checkout btn btn-danger" (click) = "checkout()">Đặt hàng</button>
     </div>
   </div>
 </div>

@@ -1,0 +1,133 @@
+<div class="container">
+  <span class="icon-close" (click)="closeDialog()">
+    <mat-icon>close</mat-icon>
+  </span>
+  <form [formGroup]="addProductForm" (ngSubmit)="onSubmit()" autocomplete="off">
+    <h1 class="form_heading">Thêm sản phẩm</h1>
+    <div class="form_control">
+      <input
+        class="form_input"
+        id="fullName"
+        type="text"
+        formControlName="fullName"
+        placeholder="Nhập tên sản phẩm"
+      />
+      <span class="animation"></span>
+      <div *ngIf="validateOverall('fullName')">
+        <span class="mess" *ngIf="validateControls('fullName', 'required')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Vui lòng tên sản
+          phẩm</span
+        >
+      </div>
+    </div>
+    <div class="form_control">
+      <input
+        class="form_input"
+        id="cost"
+        type="text"
+        formControlName="cost"
+        placeholder="Nhập giá sản phẩm"
+      />
+      <span class="animation"></span>
+      <div *ngIf="validateOverall('cost')">
+        <span class="mess" *ngIf="validateControls('cost', 'required')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Vui lòng nhập giá sản
+          phẩm</span
+        >
+        <span class="mess" *ngIf="validateControls('cost', 'pattern')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Trường này phải là số
+          và ít nhất 4 số</span
+        >
+        <span class="mess" *ngIf="validateControls('cost', 'minlength')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Trường này phải là số
+          và ít nhất 4 số</span
+        >
+      </div>
+    </div>
+    <div class="form_control">
+      <input
+        class="form_input"
+        id="amount"
+        type="text"
+        formControlName="amount"
+        placeholder="Nhập số lượng của sản phẩm"
+      />
+      <span class="animation"></span>
+      <div *ngIf="validateOverall('amount')">
+        <span class="mess" *ngIf="validateControls('amount', 'required')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Vui lòng nhập số lượng
+          của sản phẩm</span
+        >
+        <span class="mess" *ngIf="validateControls('amount', 'pattern')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Trường này phải là số
+        </span>
+      </div>
+    </div>
+    <div class="form_control">
+      <input
+        class="form_input"
+        id="specifications"
+        type="text"
+        formControlName="specifications"
+        placeholder="Nhập thông số kỹ thuật của sản phẩm "
+      />
+      <span class="animation"></span>
+      <div *ngIf="validateOverall('specifications')">
+        <span
+          class="mess"
+          *ngIf="validateControls('specifications', 'required')"
+        >
+          <mat-icon class="cancel-icon">cancel</mat-icon> Vui lòng nhập thông số
+          kỹ thuật của sản phẩm
+        </span>
+      </div>
+    </div>
+    <div class="form_control">
+      <select
+        class="form-select"
+        id="type"
+        formControlName="type"
+        aria-label="Chọn loại sản phẩm"
+      >
+        <option value="" disabled selected>Chọn loại sản phẩm</option>
+        <option value="laptop">Laptop</option>
+        <option value="man-hinh">Màn hình</option>
+        <option value="ram">Ram</option>
+      </select>
+      <span class="animation"></span>
+      <div *ngIf="validateOverall('type')">
+        <span class="mess" *ngIf="validateControls('type', 'required')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Vui lòng loại sản phẩm
+        </span>
+      </div>
+    </div>
+    <div class="form_control">
+      <input
+        type="file"
+        class="form-control"
+        id="inputGroupFile03"
+        aria-describedby="inputGroupFileAddon03"
+        formControlName="image"
+        multiple
+        placeholder="Tải lên ảnh của sản phẩm "
+        (change)="onFileChanged($event)"
+      />
+      <span class="animation"></span>
+      <div *ngIf="validateOverall('image')">
+        <span class="mess" *ngIf="validateControls('image', 'required')">
+          <mat-icon class="cancel-icon">cancel</mat-icon> Vui lòng tải ảnh của
+          sản phẩm
+        </span>
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      class="form_btn"
+      [ngClass]="this.addProductForm.valid ? 'active_form_btn' : ''"
+      [disabled]="!this.addProductForm.valid"
+    >
+      Thêm sản phẩm
+    </button>
+  </form>
+</div>
