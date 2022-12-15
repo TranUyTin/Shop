@@ -9,6 +9,7 @@ import {
 import { FormService } from 'src/app/service/form.service';
 import { NavigateService } from 'src/app/service/navigate.service';
 import { UserService } from 'src/app/service/user-service.service';
+import { ToastService } from 'src/app/service/toast.service';
 
 @Component({
   selector: 'app-manage-product',
@@ -30,7 +31,8 @@ export class ManageProductComponent implements OnInit, OnDestroy {
     public fb: FormBuilder,
     public formSerive: FormService,
     public dialog: MatDialog,
-    private userService: UserService
+    private userService: UserService,
+    public toastService : ToastService
   ) {}
 
   ngOnInit(): void {
@@ -41,11 +43,33 @@ export class ManageProductComponent implements OnInit, OnDestroy {
     this.navigateService.currentUrl = '';
   }
   openAddProduct() {
+    this.userService.isEditProduct = false;
     const dialogRef = this.dialog.open(AddProductComponent, {
       width: '600px',
     });
+    dialogRef.afterClosed().subscribe(result => {
+      this.getListProduct();
+    })
   }
 
+  openEditProduct(id) {
+    this.userService.isEditProduct = true;
+    this.userService.getListProductDetails(id).subscribe(
+      (res: any) => {
+        const dialogRef = this.dialog.open(AddProductComponent, {
+         data : res,
+         width: '600px',
+        });
+        dialogRef.afterClosed().subscribe(result => {
+          this.getListProduct();
+          this.userService.isEditProduct = false;
+        })
+      }, error => {
+        console.log(error)
+      }
+    )
+  }
+  
   getListProduct() {
     const data = {
       pageNumber: this.pageNumber,
@@ -84,4 +108,17 @@ export class ManageProductComponent implements OnInit, OnDestroy {
       this.totalPage = res.summary.totalPage;
     })
   }
+
+  deleteProduct(id) {
+    this.userService.deleteProductAdmin(id).subscribe(
+      (res: any) => {
+        this.toastService.showError('Xóa sản phẩm thất bại, vui lòng thử lại!')
+      }, error => {
+        this.toastService.showSuccess('Xóa sản phẩm thành công!')
+        this.getListProduct();
+      }
+    )
+  }
+
+
 }

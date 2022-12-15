@@ -30,7 +30,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let product of productList; let i = index">
-          <th scope="row">{{(pageNumber -1 ) * pageSize + i }}</th>
+          <th scope="row">{{(pageNumber -1 ) * pageSize + i  +1}}</th>
           <td>{{product.name}}</td>
           <td><img style="width : 120px; height:120px" src="{{product.images[0].imageUrl}}" alt=""></td>
           <td>{{product.cost | number:'1.0'}} VNĐ</td>
@@ -38,12 +38,12 @@
           <td>{{product.specifications}}</td>
           <td>
             <div  class="action">
-              <div class="action-item">
+              <div class="action-item" (click)="openEditProduct(product.id)">
                 <mat-icon matTooltip="Chỉnh sửa" [matTooltipPosition]="'above'"
                   >edit</mat-icon
                 >
               </div>
-              <div class="action-item">
+              <div class="action-item" (click)="deleteProduct(product.id)">
                 <mat-icon matTooltip="Xóa" [matTooltipPosition]="'above'"
                   >delete</mat-icon
                 >

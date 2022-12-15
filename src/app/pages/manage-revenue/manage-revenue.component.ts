@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { UserService } from 'src/app/service/user-service.service';
+import { AfterViewInit, Component, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
 import { ChartOptions } from 'src/app/constant/type';
 import { NavigateService } from 'src/app/service/navigate.service';
 import { ChartComponent } from 'ng-apexcharts';
@@ -7,15 +8,42 @@ import { ChartComponent } from 'ng-apexcharts';
   templateUrl: './manage-revenue.component.html',
   styleUrls: ['./manage-revenue.component.css'],
 })
-export class ManageRevenueComponent implements OnInit {
+export class ManageRevenueComponent implements OnInit, AfterViewChecked {
   @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
-  constructor(private navigateService: NavigateService) {
+
+  listRevenue: any = [];
+  isCallApi = false;
+  constructor(private navigateService: NavigateService,
+    public userService: UserService) {
+  }
+
+  getListRevenue(){
+    this.userService.getRevenue().subscribe
+     ((res: any)  => {
+       for(let i =1 ; i<=12;i++){
+         res.forEach((element, index) => {
+           if( element['key'] == i) {
+             this.listRevenue.push(element['value'])
+           }
+         });
+         this.isCallApi = true;
+       }
+       console.log(this.listRevenue)
+    },error => {
+      console.log(error)
+      this.isCallApi = false;;
+
+    })
+  }
+  
+
+  chartRevenue(){
     this.chartOptions = {
       series: [
         {
-          name: 'Doanh thu',
-          data: [10, 41, 35, 51, 49, 62, 69, 91, 148, 10, 20, 30],
+          name: 'Doanh thu (VNĐ)',
+          data: this.listRevenue,
           color: '#a70404',
         },
       ],
@@ -72,6 +100,9 @@ export class ManageRevenueComponent implements OnInit {
           'Tháng 12',
         ],
         labels: {
+          formatter: function (value) {
+            return value ;
+          },
           style: {
             colors: '#000',
             fontSize: '16px',
@@ -84,8 +115,18 @@ export class ManageRevenueComponent implements OnInit {
     };
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.chartRevenue();
+    this.getListRevenue();
     this.navigateService.currentUrl = this.navigateService.getCurrentUrl();
+    
+  }
+
+  ngAfterViewChecked(): void {
+    if(this.isCallApi) {
+      this.chartRevenue();
+      this.isCallApi = false;
+    }
   }
   ngOnDestroy(): void {
     this.navigateService.currentUrl = '';

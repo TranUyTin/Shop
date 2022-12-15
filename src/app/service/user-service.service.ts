@@ -9,6 +9,7 @@ export class UserService {
 
   constructor(public http: HttpClient) { }
   isResetCartHeader = false;
+  isEditProduct = false;
   getListUser(data){
     const {pageNumber, pageSize, sortColumn, isAscSort} = data;
     const query = `?pageNumber=${pageNumber}&pageSize=${pageSize}&sortColumn=${sortColumn}&isAscSort=${isAscSort}`
@@ -96,5 +97,23 @@ export class UserService {
 
   createBill(data) {
     return this.http.post(API_HOST + API.CREATE_BILL, data)
+  }
+  createProduct(data) {
+    return this.http.post(API_HOST + API.CREATE_PRODUCT, data)
+  }
+  updateProduct(id, data) {
+    return this.http.put(API_HOST + API.UPDATE_PRODUCT + `/${id}`, data)
+  }
+  deleteProductAdmin(id){
+    return this.http.delete(API_HOST + API.DELETE_PRODUCT_ADMIN + `/${id}`)
+  }
+  getListBrand(data) {
+    const {pageNumber, pageSize, sortColumn, isAscSort} = data;
+    const query = `?pageNumber=${pageNumber}&pageSize=${pageSize}&sortColumn=${sortColumn}&isAscSort=${isAscSort}`
+    return this.http.get(API_HOST + API.LIST_BRAND + query)
+  }
+
+  getRevenue() {
+    return this.http.get(API_HOST + API.REVENUE)
   }
 }

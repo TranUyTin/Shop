@@ -60,9 +60,11 @@ export class CartComponent implements OnInit {
     this.userService.deleteProduct(id).subscribe((res: any)  => {
       this.getListCart();
       this.toastService.showSuccess('Xóa sản phẩm thành công');
+      this.userService.isResetCartHeader= true;
     }, error => {
       console.log(error)
       this.toastService.showError('Xóa sản phẩm thất bại, vui lòng thử lại!');
+      this.userService.isResetCartHeader= false;
     }
     )
   }

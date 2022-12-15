@@ -5,6 +5,7 @@ export const API = {
   LIST_USER: '/user/list',
   LIST_PRODUCT :'/product/list',
   LIST_PRODUCT_TYPE :'/product-type/list',
+  LIST_BRAND: '/brand/list',
   LIST_PRODUCT_DETAILS :'/product-type',
   LIST_CATEGORY :'/product/search-brand',
   PRODUCT_DETAILS: '/product',
@@ -20,5 +21,8 @@ export const API = {
   DELETE_PRODUCT: '/order-details/delete/',
   SEARCH_BILL: '/bill/',
   CREATE_BILL: '/bill/create',
-  
+  CREATE_PRODUCT: '/product',
+  UPDATE_PRODUCT: '/product',
+  DELETE_PRODUCT_ADMIN: '/product',
+  REVENUE: '/bill/total'
 };

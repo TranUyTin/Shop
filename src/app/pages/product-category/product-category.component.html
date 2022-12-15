@@ -19,7 +19,7 @@
   </div>
   <div class="product_list row">
     <div class="product_item col-md-3" *ngFor="let product of products">
-      <div class="card" style="width: 18rem">
+      <div class="card" style="width: 18reml">
         <img
           src="{{ product.images[0]['imageUrl'] || product.images[1]['imageUrl'] || product.images[2]['imageUrl'] || product.images[3]['imageUrl'] }}"
           class="card-img-top"
@@ -28,7 +28,7 @@
         />
         <div class="card-body">
           <h5 class="card-title" [ngbTooltip]="product.name">
-            {{ (product.name.length >50 ? product.name.slice(0,50) : product.name) + '...'  }}
+            {{ (product.name.length >55 ? product.name.slice(0,55) + '...' : product.name)  }}
           </h5>
           <p class="card-text">
             <span class="item-price">{{ product.cost | number:'1.0'}} VNĐ</span>
@@ -41,9 +41,22 @@
               height="22px"
               src="../../../assets/image/product_item/cpu.png"
             />
-            <span>
+            <span [ngbTooltip]="product.specifications
+            .split(',')[0]
+            .concat(product.specifications.split(',')[1])
+            .split('(')[0]
+            .split('CPU')[1]">
               {{
                 product.specifications
+                  .split(",")[0]
+                  .concat(product.specifications.split(",")[1])
+                  .split("(")[0]
+                  .split("CPU")[1].length > 25 ? 
+                  product.specifications
+                  .split(",")[0]
+                  .concat(product.specifications.split(",")[1])
+                  .split("(")[0]
+                  .split("CPU")[1].slice(0,25) + '...' : product.specifications
                   .split(",")[0]
                   .concat(product.specifications.split(",")[1])
                   .split("(")[0]
@@ -57,9 +70,23 @@
               height="22px"
               src="../../../assets/image/product_item/ram.png"
             />
-            <span>
+            <span
+            [ngbTooltip]="product.specifications
+            .split(',')[2]
+            .split(' ', 5)
+            .join(',')
+            .replaceAll(',', ' ')"
+            >
               {{
                 product.specifications
+                  .split(",")[2]
+                  .split(" ", 5)
+                  .join(",")
+                  .replaceAll(",", " ").length > 25 ? product.specifications
+                  .split(",")[2]
+                  .split(" ", 5)
+                  .join(",")
+                  .replaceAll(",", " ").slice (0,25) + '...' : product.specifications
                   .split(",")[2]
                   .split(" ", 5)
                   .join(",")
@@ -73,7 +100,9 @@
               height="22px"
               src="../../../assets/image/product_item/gpu.png"
             />
-            <span> {{ product.specifications.split(",")[4] }}</span>
+            <span [ngbTooltip] = "product.specifications.split(',')[4]"> 
+              {{ product.specifications.split(",")[4].length > 25 ? product.specifications.split(",")[4].slice(0,25) + '...' : product.specifications.split(",")[4] }}
+            </span>
           </li>
         </ul>
         <div class="card-body">

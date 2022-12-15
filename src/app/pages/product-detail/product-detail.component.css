@@ -15,6 +15,9 @@
 .product_relevant-header {
   font-weight: 700;
 }
+.detail_header-name{
+  max-width: 1000px;
+}
 .detail_header-stock, .detail_header-out-of-stock {
   padding: 6px 8px;
   background-color: #44b81b;

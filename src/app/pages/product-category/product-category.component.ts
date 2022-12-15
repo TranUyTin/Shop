@@ -116,6 +116,7 @@ export class ProductCategoryComponent implements OnInit, AfterViewChecked {
   loadPage(page){
     this.pageNumber = page;
     this.getCategory();
+    window.scroll(0,0)
   }
 
   addCart(id){
