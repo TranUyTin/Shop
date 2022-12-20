@@ -31,7 +31,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     public Set<OrderDetailDTO> getOrderDetailsList(Long cartId) {
-        Set<OrderDetails> orderDetailsSet = orderDetailRepository.findByCartId(cartId);
+        Set<OrderDetails> orderDetailsSet = orderDetailRepository.findByCartIdAndIsDeleted(cartId, false);
         Set<OrderDetailDTO> orderDetailDTOSet = new HashSet<>();
         for(OrderDetails orderDetails: orderDetailsSet) {
             if (!orderDetails.isDeleted()) {
@@ -52,7 +52,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public OrderDetails addProductToOrderDetail(OrderDetailRequest orderDetailRequest) {
         Cart cart = cartRepository.findById(orderDetailRequest.getCartId()).get();
         Product product = productRepository.findByProductId(orderDetailRequest.getProductId());
-        OrderDetails orderDetailsInDB = orderDetailRepository.findByProduct(orderDetailRequest.getProductId(), orderDetailRequest.getCartId());
+        OrderDetails orderDetailsInDB = orderDetailRepository.findByProduct(orderDetailRequest.getProductId(), orderDetailRequest.getCartId(), false);
         if (orderDetailsInDB == null) {
             OrderDetails orderDetails = new OrderDetails();
             orderDetails.setCart(cart);

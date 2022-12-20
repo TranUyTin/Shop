@@ -5,6 +5,9 @@ import com.example.TraditionalWeb.models.Bill;
 import com.example.TraditionalWeb.models.request.BillRequest;
 import com.example.TraditionalWeb.models.request.PagingRequest;
 import com.example.TraditionalWeb.models.response.PaginationResponse;
+import com.example.TraditionalWeb.models.Total;
+
+import java.text.ParseException;
 import java.util.*;
 public interface BillService {
     Bill createBill (BillRequest billRequest);
@@ -16,4 +19,6 @@ public interface BillService {
 
     PaginationResponse<Bill> getListBill(PagingRequest pagingRequest);
     Set<Bill> getBillByUser(Long userId);
+
+    Set<Total> count() throws ParseException;
 }

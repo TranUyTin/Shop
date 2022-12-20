@@ -23,6 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.criteria.Predicate;
 import java.io.IOException;
@@ -62,22 +63,42 @@ public class ProductServiceImpl implements ProductService {
             product.setBrands(brandRepository.findByNameAndIsDeleted(productRequest.getBrand(), false));
         }
 
+        if(productTypeRepository.findByNameAndIsDeleted(productRequest.getProductType(), false) == null){
+            throw new UserException("400", "Loại sản phẩm không tồn tại!");
+        }
+        else {
+            product.setProductTypes(productTypeRepository.findByNameAndIsDeleted(productRequest.getProductType(),false));
+        }
 
+        Set<Images> imagesSet = new HashSet<>();
+        Long max = 0L;
+        for(MultipartFile img : productRequest.getImages()){
+            List<Images> images1 = imagesRepository.findAll();
+
+            for(Images item : images1){
+                if (item.getId() > max){
+                    max=item.getId();
+                }
+            }
+            Images images = new Images(max+1,null,false, product);
+            max = max + 1;
+            images.setImageUrl("http://localhost:6789/image/"+img.getOriginalFilename());
+            List<Images> imagesSet1 = imagesRepository.findAll();
+            for (Images img1 : imagesSet1) {
+                if (img1.getId() == images.getId()) {
+                    images.setId(images.getId() + 1);
+                }
+            }
+            imagesSet.add(images);
+        }
+        product.setName(productRequest.getName());
+        product.setImages(imagesSet);
         product.setQuantity(productRequest.getQuantity());
         product.setIsDeleted("False");
         product.setSpecifications((productRequest.getSpecifications()));
         product.setCost(productRequest.getCost());
         productRepository.save(product);
-        Set<Images> imagesSet = new HashSet<>();
-        if (Objects.nonNull(imagesSet)) {
-            Images images = new Images();
-            images.setImageUrl(productRequest.getImages());
-            images.setIsDeleted(false);
-            images.setProduct(product);
-            imagesSet.add(images);
-        }
-        product.setImages(imagesSet);
-        productRepository.save(product);
+
         return product;
     }
 
@@ -91,7 +112,7 @@ public class ProductServiceImpl implements ProductService {
             product = productRepository.findByIdAndIsDeleted(id, "False");
         }
 
-        if(productRepository.existsByName(productRequest.getName())){
+        if(productRepository.findByNameAndId(id, productRequest.getName() )!= null){
             throw new UserException("400", "Tên đã tồn tại!");
         }
         product.setName(productRequest.getName());
@@ -101,17 +122,43 @@ public class ProductServiceImpl implements ProductService {
         else {
             product.setProductTypes(productTypeRepository.findByNameAndIsDeleted(productRequest.getProductType(), false));
         }
+
+        if(!brandRepository.existsByNameAndIsDeleted(productRequest.getBrand(),false)) {
+            throw new UserException("400", "Loại món ăn không tồn tại!");
+        }
+        else {
+            product.setBrands(brandRepository.findByNameAndIsDeleted(productRequest.getBrand(), false));
+        }
         Set<Images> imagesSet = new HashSet<>();
-        if (Objects.nonNull(imagesSet)) {
-            Images images = new Images();
-            images.setImageUrl(productRequest.getImages());
-            images.setIsDeleted(false);
+        Long max = 0L;
+        for(MultipartFile img : productRequest.getImages()){
+            List<Images> images1 = imagesRepository.findAll();
+
+            for(Images item : images1){
+                if (item.getId() > max){
+                    max=item.getId();
+                }
+            }
+            Images images = new Images(max+1,null,false, product);
+            max = max + 1;
+            Set<Images> imageSet = imagesRepository.findByProductAndIsDeleted(id, false);
+            for (Images im: imageSet){
+                if (!("http://localhost:6789/image/" + img.getOriginalFilename()).equals(im.getImageUrl())){
+                    images.setImageUrl("http://localhost:6789/image/"+img.getOriginalFilename());
+                }
+            }
+            List<Images> imagesSet1 = imagesRepository.findAll();
+            for (Images img1 : imagesSet1) {
+                if (img1.getId() == images.getId()) {
+                    images.setId(images.getId() + 1);
+                }
+            }
             imagesSet.add(images);
-            imagesRepository.save(images);
         }
         product.setImages(imagesSet);
         product.setQuantity(productRequest.getQuantity());
         product.setCost(productRequest.getCost());
+        product.setSpecifications(productRequest.getSpecifications());
         productRepository.save(product);
         return product;
     }

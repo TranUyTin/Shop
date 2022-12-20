@@ -27,6 +27,9 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     @Query(value = "SELECT * FROM product u WHERE u.id_product=?1", nativeQuery = true)
     Product findByProductId(Long id);
 
+    @Query(value = "SELECT * FROM product u WHERE u.id_product !=?1 and u.name = ?2", nativeQuery = true)
+    Product findByNameAndId(Long id, String name);
+
     @Query(value = "SELECT * FROM product u WHERE u.name like %?1% and u.is_deleted = ?2", nativeQuery = true)
     Page<Product> findByName( String name, String isDeleted, Specification<Product> spec, Pageable pageable);
 

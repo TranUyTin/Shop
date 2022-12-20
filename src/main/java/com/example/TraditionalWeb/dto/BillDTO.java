@@ -20,5 +20,5 @@ public class BillDTO {
     public Boolean statusDelivery;
     public Long total;
     public Boolean isDeleted;
-    public Set<OrderDetails> orderDetails;
+    public Set<OrderDetailDTO> orderDetails;
 }

@@ -29,5 +29,5 @@ public class ProductRequest {
     @NotNull
     private String productType;
     @NotNull
-    private String images;
+    private MultipartFile[] images;
 }

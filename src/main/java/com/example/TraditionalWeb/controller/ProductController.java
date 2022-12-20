@@ -6,6 +6,7 @@ import com.example.TraditionalWeb.models.Product;
 import com.example.TraditionalWeb.models.request.PagingRequest;
 import com.example.TraditionalWeb.models.request.ProductRequest;
 import com.example.TraditionalWeb.models.response.PaginationResponse;
+import com.example.TraditionalWeb.service.FileStorageService;
 import com.example.TraditionalWeb.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ import java.io.IOException;
 public class ProductController {
     @Autowired
     private ProductService productService;
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @GetMapping(value = "/list")
     public ResponseEntity<?> getListProduct(PagingRequest pagingRequest){
@@ -52,14 +55,16 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> createProduct(@RequestBody ProductRequest dishRequest){
+    public ResponseEntity<?> createProduct(@ModelAttribute ProductRequest productRequest){
             try {
-                Product product = productService.createProduct(dishRequest);
+                Product product = productService.createProduct(productRequest);
+                fileStorageService.save(productRequest.getImages());
                 return ResponseEntity.ok("Tạo món ăn thành công");
             }catch (UserException e) {
                 return ResponseEntity.ok(e.getMessage());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-
 
 
     }
@@ -67,9 +72,12 @@ public class ProductController {
     public ResponseEntity<?> updateProduct(@PathVariable Long id, ProductRequest productRequest){
         try {
             Product product = productService.updateProduct(id, productRequest);
+            fileStorageService.save(productRequest.getImages());
             return  ResponseEntity.ok("Cập nhật món ăn thành công");
         } catch (UserException e){
             return ResponseEntity.ok(e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
     }
